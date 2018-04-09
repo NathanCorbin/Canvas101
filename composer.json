@@ -1,0 +1,15 @@
+{
+	"name": "ncorbing/canvas-reporting-tool",
+	"authors": [
+		{
+			"name":"Nathan Corbin",
+			"email":"ncorbin2@mail.greenriver.edu"
+		}
+	],
+	"require":{
+		"bcosca/fatfree-core":"dev-master"
+	},
+	"autoload": {
+		"classmap": ["model/classes/"]
+	}
+}
