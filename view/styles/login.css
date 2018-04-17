@@ -1,0 +1,39 @@
+body {
+	background-color: #eee !important;
+	text-shadow: 0 .05rem .1rem rgba(0,0,0,.3);
+}
+
+#page{
+    width:30%;
+    
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+#submit{
+    padding-left:50px;
+}
+
+#login {
+	width: 65%;
+	margin: 0 auto;
+}
+
+input, button, form {
+	max-width: 332px !important;
+}
+
+.jumbotron {
+	max-width: 546px;
+	max-height: 360px;
+	margin: 0 auto;
+}
+
+h2 {
+	padding-bottom: 5px !important;
+}
+
+button {
+	margin-top: 3px;
+}
