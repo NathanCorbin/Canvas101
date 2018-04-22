@@ -6,6 +6,7 @@ class UserDB
 {
 	private $_username;
 	private $_password;
+	private $_accessKey;
 
 	function __construct()
 	{
@@ -20,6 +21,20 @@ class UserDB
         	echo $e->getMessage();
         	return;
     	}
+	}
+
+	public static function getAccessKey($username)
+	{
+		global $dbh;
+
+		$query = "SELECT access_key FROM users WHERE username = :username";
+
+		$statement = $dbh->prepare($query);
+		$statement->execute(['username' => $username]);
+
+		$result = $statement->fetch();
+
+		return $result[0];
 	}
 
 	public static function login($username, $password)
@@ -43,5 +58,5 @@ class UserDB
 		$result = $result[0];
 
 		return $result['password'] == sha1($password);
-	}	
+	}
 }
