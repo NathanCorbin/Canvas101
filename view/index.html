@@ -4,14 +4,24 @@
 	<title>Home Page</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ @BASE }}/view/styles/page.css">
 </head>
 <body>
+    <div class="wrapper">
+        <include href="/view/includes/sidebar.html">
 
-    <include href="/view/includes/navbar.html">
-    
-    <div class="container">
-        <p>{{ @user->getAccessKey() }}</p>
+        <div id="content" class="container">
+            <repeat group="{{ @data }}" value="{{ @item }}">
+                <p>id: {{ @item["id"] }}</p>
+                <p>name: {{ @item["name"] }}</p>
+                <p>account_id: {{ @item["account_id"] }}</p>
+                <p>uuid: {{ @item["uuid"] }}</p>
+                <p>start_at: {{ @item["start_at"] }}</p>
+                <p>grading_standard: {{ @item["grading_standard"] }}</p>
+                <p>is_public: {{ @item["is_public"] }}</p>
+            </repeat>
+        </div>
     </div>
 
     <include href="/view/includes/javascripts.html">

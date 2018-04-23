@@ -21,7 +21,17 @@
 		// get the user from the session
 		$user = unserialize($_SESSION['user']);
 
+		// get data using curl with user access key
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "https://canvas.instructure.com/api/v1/courses?access_token=".$user->getAccessKey());
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		
+		$data = curl_exec($ch);
+
 		$f3->set('user', $user);
+		$f3->set('data', json_decode($data, true));
+
+		curl_close($ch);
 
 		echo Template::instance()->render('view/index.html');
 	});
@@ -51,6 +61,13 @@
 		}
 
 		echo Template::instance()->render('view/login.html');
+	});
+
+	$f3->route('GET|POST /logout', function($f3){
+		if(isset($_SESSION['user']))
+			unset($_SESSION['user']);
+
+		$f3->reroute('/login');
 	});
 
 	// run fat-free
