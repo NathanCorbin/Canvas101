@@ -11,16 +11,13 @@
     <div class="wrapper">
         <include href="/view/includes/sidebar.html">
 
-        <div id="content" class="container">
+        <div id="content">
+            {{ json_encode(@data, JSON_PRETTY_PRINT) }}
+
             <repeat group="{{ @data }}" value="{{ @item }}">
-                <p>id: {{ @item["id"] }}</p>
-                <p>name: {{ @item["name"] }}</p>
-                <p>account_id: {{ @item["account_id"] }}</p>
-                <p>uuid: {{ @item["uuid"] }}</p>
-                <p>start_at: {{ @item["start_at"] }}</p>
-                <p>grading_standard: {{ @item["grading_standard"] }}</p>
-                <p>is_public: {{ @item["is_public"] }}</p>
+                <p>{{ @item[0] }}</p>
             </repeat>
+
         </div>
     </div>
 
