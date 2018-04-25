@@ -13,11 +13,6 @@
 
         <div id="content">
             {{ json_encode(@data, JSON_PRETTY_PRINT) }}
-
-            <repeat group="{{ @data }}" value="{{ @item }}">
-                <p>{{ @item[0] }}</p>
-            </repeat>
-
         </div>
     </div>
 

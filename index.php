@@ -7,39 +7,26 @@
 
 	// require the autoload file
 	require_once('vendor/autoload.php');
+
 	
 	// create an instance of the Base class
 	$f3 = Base::instance();
 
 	// define a default route
 	$f3->route('GET /', function($f3) {
-
+		include("model/apiRequests.php");
 
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
 
 		new UserDB();
 
-		// get the user from the session
 		$user = unserialize($_SESSION['user']);
 
-		// get data using curl with user access key
-		$url = "https://canvas.instructure.com/api/v1/courses/1310362/analytics/assignments?access_token=".$user->getAccessKey();
-
-		$ch = curl_init();
-
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-
-		$data = curl_exec($ch);
-
-		curl_close($ch);
-		
-		//$data = getCourseID($user);
+		$data = getData($user->getAccessKey());
 
 		$f3->set('user', $user);
-		$f3->set('data', json_decode($data, true));
-
+		$f3->set('data', $data);
 
 		echo Template::instance()->render('view/index.html');
 	});
