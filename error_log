@@ -19,3 +19,31 @@
 [24-Apr-2018 23:09:41 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:322] Composer\Autoload\includeFile()
 [24-Apr-2018 23:09:41 UTC] [328/Canvas101/index.php:55] spl_autoload_call()
 [24-Apr-2018 23:09:41 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:03:52 UTC] Class 'Curl\Curl' not found [/home/siqbalgr/public_html/328/Canvas101/model/apiRequests.php:9]
+[26-Apr-2018 22:03:52 UTC] [328/Canvas101/model/apiRequests.php:30] getCourseIDs()
+[26-Apr-2018 22:03:52 UTC] [328/Canvas101/index.php:26] getData()
+[26-Apr-2018 22:03:52 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:04:14 UTC] Class 'Curl\Curl' not found [/home/siqbalgr/public_html/328/Canvas101/model/apiRequests.php:9]
+[26-Apr-2018 22:04:14 UTC] [328/Canvas101/model/apiRequests.php:30] getCourseIDs()
+[26-Apr-2018 22:04:14 UTC] [328/Canvas101/index.php:26] getData()
+[26-Apr-2018 22:04:14 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:07:20 UTC] Unable to open view/reports/grade-reports.html
+[26-Apr-2018 22:07:20 UTC] [328/Canvas101/tmp/2yqjg07mwd4ws.39b0rmaw4pgk4.php:15] Preview->render()
+[26-Apr-2018 22:07:20 UTC] [328/Canvas101/index.php:44] Preview->render()
+[26-Apr-2018 22:07:20 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:07:35 UTC] Unable to open view/reports/grade-reports.html
+[26-Apr-2018 22:07:35 UTC] [328/Canvas101/tmp/2yqjg07mwd4ws.39b0rmaw4pgk4.php:15] Preview->render()
+[26-Apr-2018 22:07:35 UTC] [328/Canvas101/index.php:44] Preview->render()
+[26-Apr-2018 22:07:35 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:07:41 UTC] Unable to open view/reports/grade-reports.html
+[26-Apr-2018 22:07:41 UTC] [328/Canvas101/tmp/2yqjg07mwd4ws.39b0rmaw4pgk4.php:15] Preview->render()
+[26-Apr-2018 22:07:41 UTC] [328/Canvas101/index.php:44] Preview->render()
+[26-Apr-2018 22:07:41 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:08:40 UTC] Unable to open view/reports/grade-reports.html
+[26-Apr-2018 22:08:40 UTC] [328/Canvas101/tmp/2yqjg07mwd4ws.39b0rmaw4pgk4.php:15] Preview->render()
+[26-Apr-2018 22:08:40 UTC] [328/Canvas101/index.php:44] Preview->render()
+[26-Apr-2018 22:08:40 UTC] [328/Canvas101/index.php:82] Base->run()
+[26-Apr-2018 22:12:21 UTC] Unable to open view/reports/grade-reports.html
+[26-Apr-2018 22:12:21 UTC] [328/Canvas101/tmp/2yqjg07mwd4ws.39b0rmaw4pgk4.php:15] Preview->render()
+[26-Apr-2018 22:12:21 UTC] [328/Canvas101/index.php:44] Preview->render()
+[26-Apr-2018 22:12:21 UTC] [328/Canvas101/index.php:82] Base->run()

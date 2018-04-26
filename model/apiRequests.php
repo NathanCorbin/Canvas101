@@ -62,5 +62,30 @@
 
 	function getAssignments($access_key)
 	{
-		
+        $courseIds = getCourseIDs($access_key);
+        $userIds = array();
+
+        foreach($courseIds as $courseId)
+        {
+            $url = "https://canvas.instructure.com/api/v1/courses/".$courseId."/enrollments?access_token=".$access_key;
+
+            $curl = new Curl();
+            $curl->get($url);
+
+            $json = json_encode($curl->response);
+            $data = json_decode($json);
+
+            foreach($data as $key => $jsons)
+            {
+                foreach($jsons as $key => $value)
+                {
+                    if($key == "user")
+                    {
+                        array_push($userIds, $value->id);
+                    }
+
+                }
+            }
+        }
+        return $userIds;
 	}

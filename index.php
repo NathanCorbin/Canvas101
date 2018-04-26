@@ -23,18 +23,18 @@
 
 		$user = unserialize($_SESSION['user']);
 
-		$data = getData($user->getAccessKey());
+		$data = getAssignments($user->getAccessKey());
 
 		$grades = array();
 		$names = array();
 
-		foreach($data as $value)
-		{
-			if(is_numeric($value))
-				array_push($grades, $value);
-			else
-				array_push($names, $value);
-		}
+//		foreach($data as $value)
+//		{
+//			if(is_numeric($value))
+//				array_push($grades, $value);
+//			else
+//				array_push($names, $value);
+//		}
 
 		$f3->set('user', $user);
 		$f3->set('data', $data);
