@@ -1,0 +1,21 @@
+[24-Apr-2018 23:07:11 UTC] require_once(/home/siqbalgr/db.php): failed to open stream: Success
+[24-Apr-2018 23:07:11 UTC] [328/Canvas101/model/classes/userdb.php:3] Base->{closure}()
+[24-Apr-2018 23:07:11 UTC] [328/Canvas101/model/classes/userdb.php:3] require_once()
+[24-Apr-2018 23:07:11 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:444] include()
+[24-Apr-2018 23:07:11 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:322] Composer\Autoload\includeFile()
+[24-Apr-2018 23:07:11 UTC] [328/Canvas101/index.php:55] spl_autoload_call()
+[24-Apr-2018 23:07:11 UTC] [328/Canvas101/index.php:82] Base->run()
+[24-Apr-2018 23:08:49 UTC] require_once(/home/siqbalgr/db.php): failed to open stream: Success
+[24-Apr-2018 23:08:49 UTC] [328/Canvas101/model/classes/userdb.php:3] Base->{closure}()
+[24-Apr-2018 23:08:49 UTC] [328/Canvas101/model/classes/userdb.php:3] require_once()
+[24-Apr-2018 23:08:49 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:444] include()
+[24-Apr-2018 23:08:49 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:322] Composer\Autoload\includeFile()
+[24-Apr-2018 23:08:49 UTC] [328/Canvas101/index.php:55] spl_autoload_call()
+[24-Apr-2018 23:08:49 UTC] [328/Canvas101/index.php:82] Base->run()
+[24-Apr-2018 23:09:41 UTC] require_once(/home/siqbalgr/db.php): failed to open stream: Success
+[24-Apr-2018 23:09:41 UTC] [328/Canvas101/model/classes/userdb.php:3] Base->{closure}()
+[24-Apr-2018 23:09:41 UTC] [328/Canvas101/model/classes/userdb.php:3] require_once()
+[24-Apr-2018 23:09:41 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:444] include()
+[24-Apr-2018 23:09:41 UTC] [328/Canvas101/vendor/composer/ClassLoader.php:322] Composer\Autoload\includeFile()
+[24-Apr-2018 23:09:41 UTC] [328/Canvas101/index.php:55] spl_autoload_call()
+[24-Apr-2018 23:09:41 UTC] [328/Canvas101/index.php:82] Base->run()

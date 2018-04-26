@@ -1,0 +1,2 @@
+[24-Apr-2018 23:03:57 UTC] PHP Warning:  require_once(/home/siqbalgr/db.php): failed to open stream: Success in /home/siqbalgr/public_html/328/Canvas101/model/classes/userdb.php on line 3
+[24-Apr-2018 23:03:57 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/siqbalgr/db.php' (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home/siqbalgr/public_html/328/Canvas101/model/classes/userdb.php on line 3

@@ -1,6 +1,6 @@
 <?php
 
-require_once('/home/ncorbing/db.php');
+require_once('/home/siqbalgr/database.php');
 
 class UserDB
 {
