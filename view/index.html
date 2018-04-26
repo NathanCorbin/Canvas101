@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="{{ @BASE }}/view/styles/page.css">
 </head>
 <body>
-    <div class="wrapper">
-        <include href="/view/includes/sidebar.html">
-
-        <div id="content">
-            {{ json_encode(@data, JSON_PRETTY_PRINT) }}
-        </div>
+    <include href="/view/includes/sidebar.html">
+    <!-- {{ print_r(@data) }} !-->
+    
+    <div class="container" id="content">
+        <include href="view/reports/assignment-reports.html">
     </div>
 
     <include href="/view/includes/javascripts.html">

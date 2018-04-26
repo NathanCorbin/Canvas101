@@ -25,8 +25,21 @@
 
 		$data = getData($user->getAccessKey());
 
+		$grades = array();
+		$names = array();
+
+		foreach($data as $value)
+		{
+			if(is_numeric($value))
+				array_push($grades, $value);
+			else
+				array_push($names, $value);
+		}
+
 		$f3->set('user', $user);
 		$f3->set('data', $data);
+		$f3->set('grades', $grades);
+		$f3->set('names', array_unique($names));
 
 		echo Template::instance()->render('view/index.html');
 	});

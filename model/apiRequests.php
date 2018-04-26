@@ -44,12 +44,11 @@
 			{
 				foreach($jsons as $key => $value) 
 				{
-					/*
 					if($key == "user")
 					{
 						array_push($userIds, $value->name);
-					}*/
-
+					}
+					
 					if($key == "grades")
 					{
 						array_push($userIds, $value->unposted_current_score);
@@ -59,4 +58,9 @@
 		}
 
 		return $userIds;
+	}
+
+	function getAssignments($access_key)
+	{
+		
 	}
