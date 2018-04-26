@@ -87,5 +87,47 @@
                 }
             }
         }
-        return $userIds;
+        foreach($courseIds as $courseId)
+        {
+            foreach ($userIds as $userId)
+            {
+                $url = "https://canvas.instructure.com/api/v1/users/".$userId."/courses/".$courseId."/assignments?access_token=".$access_key;
+                $curl = new Curl();
+                $curl->get($url);
+
+                $json = json_encode($curl->response);
+                $data = json_decode($json);
+
+                echo $data[2];
+
+                print_r($data);
+
+
+
+
+
+            }
+//            $url = "https://canvas.instructure.com/api/v1/users/".$courseId."/enrollments?access_token=".$access_key;
+//
+//            $curl = new Curl();
+//            $curl->get($url);
+//
+//            $json = json_encode($curl->response);
+//            $data = json_decode($json);
+//
+//            foreach($data as $key => $jsons)
+//            {
+//                foreach($jsons as $key => $value)
+//                {
+//                    if($key == "user")
+//                    {
+//                        array_push($userIds, $value->id);
+//                    }
+//
+//                }
+//            }
+        }
+
+       // return $userIds;
+        return "fefefa";
 	}
