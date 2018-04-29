@@ -12,7 +12,7 @@
         data: {
             labels: {{ json_encode(@names, JSON_PRETTY_PRINT) }},
     datasets: [{
-        label: 'Grade',
+        label: '{{ @courseName }}',
         data: {{ json_encode(@grades, JSON_PRETTY_PRINT) }},
     backgroundColor: [
         'rgba(255, 99, 132, 0.2)',

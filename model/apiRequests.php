@@ -2,7 +2,13 @@
 
 	use \Curl\Curl;
 
-	function getCourseIDs($access_key)
+	/**
+	 * Gets a json string representation of all the courses
+	 * Useful for getting the course id and the name
+	 * 
+	 * @param $access_key the access token to access the api
+	 */
+	function getCourses($access_key)
 	{
 		$url = "https://canvas.instructure.com/api/v1/courses?access_token=".$access_key;
 
@@ -10,124 +16,50 @@
 		$curl->get($url);
 
 		$json = json_encode($curl->response);
-		$data = json_decode($json);
+        $json = json_decode($json);
 
-		$courseIds = array();
-
-		foreach($data as $key => $jsons) {
-			foreach($jsons as $key => $value) {
-				if($key == "id") {
-					array_push($courseIds, $value);
-				}
-			}
-		}
-
-		return $courseIds;
+       	return $json;
 	}
 
-	function getData($access_key)
+	/**
+	 * Gets the enrollment information for a particular course
+	 * Useful for getting a students name, their grade, their id, etc.
+	 * 
+	 * @param $access_key the access token to access the api
+	 * @param $courseId the id of the course to get information about
+	 */
+	function getEnrollments($access_key, $courseId)
 	{
-		$courseIds = getCourseIDs($access_key);
-		$userIds = array();
+		$url = "https://canvas.instructure.com/api/v1/courses/".$courseId."/enrollments?access_token=".$access_key;
 
-		foreach($courseIds as $courseId) 
-		{
-			$url = "https://canvas.instructure.com/api/v1/courses/".$courseId."/enrollments?access_token=".$access_key;
+		$curl = new Curl();
+		$curl->get($url);
 
-			$curl = new Curl();
-			$curl->get($url);
-
-			$json = json_encode($curl->response);
-			$data = json_decode($json);
-
-			foreach($data as $key => $jsons) 
-			{
-				foreach($jsons as $key => $value) 
-				{
-					if($key == "user")
-					{
-						array_push($userIds, $value->name);
-					}
-					
-					if($key == "grades")
-					{
-						array_push($userIds, $value->unposted_current_score);
-					}
-				}
-			}
-		}
-
-		return $userIds;
+		$json = json_encode($curl->response);
+		$json = json_decode($json);
+		
+		return $json;
 	}
 
-	function getAssignments($access_key)
+	/**
+	 * Gets a json string of all the assignments for a particular
+	 * student and a course
+	 * 
+	 * @param $access_key the access token to access the api
+	 * @param $courseId the id of the course
+	 * @param $userId the id of the student
+	 */
+	function getAssignments($access_key, $courseId, $userId)
 	{
-        $courseIds = getCourseIDs($access_key);
-        $userIds = array();
+        $userIds = getUserIDs($access_key);
+     	
+     	$url = "https://canvas.instructure.com/api/v1/courses/$courseId/analytics/users/$userId/assignments?access_token=$access_key";
 
-        foreach($courseIds as $courseId)
-        {
-            $url = "https://canvas.instructure.com/api/v1/courses/".$courseId."/enrollments?access_token=".$access_key;
+     	$curl = new Curl();
+		$curl->get($url);
 
-            $curl = new Curl();
-            $curl->get($url);
+		$json = json_encode($curl->response);
+		$json = json_decode($json);
 
-            $json = json_encode($curl->response);
-            $data = json_decode($json);
-
-            foreach($data as $key => $jsons)
-            {
-                foreach($jsons as $key => $value)
-                {
-                    if($key == "user")
-                    {
-                        array_push($userIds, $value->id);
-                    }
-
-                }
-            }
-        }
-        foreach($courseIds as $courseId)
-        {
-            foreach ($userIds as $userId)
-            {
-                $url = "https://canvas.instructure.com/api/v1/users/".$userId."/courses/".$courseId."/assignments?access_token=".$access_key;
-                $curl = new Curl();
-                $curl->get($url);
-
-                $json = json_encode($curl->response);
-                $data = json_decode($json);
-
-                echo $data[2];
-
-                print_r($data);
-
-
-
-
-
-            }
-//            $url = "https://canvas.instructure.com/api/v1/users/".$courseId."/enrollments?access_token=".$access_key;
-//
-//            $curl = new Curl();
-//            $curl->get($url);
-//
-//            $json = json_encode($curl->response);
-//            $data = json_decode($json);
-//
-//            foreach($data as $key => $jsons)
-//            {
-//                foreach($jsons as $key => $value)
-//                {
-//                    if($key == "user")
-//                    {
-//                        array_push($userIds, $value->id);
-//                    }
-//
-//                }
-//            }
-        }
-
-       // return $userIds;
-        return "fefefa";
+      	return $json;
 	}

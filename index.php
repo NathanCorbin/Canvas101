@@ -8,7 +8,6 @@
 	// require the autoload file
 	require_once('vendor/autoload.php');
 
-	
 	// create an instance of the Base class
 	$f3 = Base::instance();
 
@@ -22,24 +21,42 @@
 		new UserDB();
 
 		$user = unserialize($_SESSION['user']);
+		$key = $user->getAccessKey();
 
-		$data = getAssignments($user->getAccessKey());
+		// get all the courses
+		$courses = getCourses($key);
 
-		$grades = array();
 		$names = array();
+		$grades = array();
+		$userIds = array();
+		$courseIds = array();
+		$courseNames = array();
 
-//		foreach($data as $value)
-//		{
-//			if(is_numeric($value))
-//				array_push($grades, $value);
-//			else
-//				array_push($names, $value);
-//		}
+		// for every course, get the id and the name
+		foreach($courses as $course)
+		{
+			array_push($courseIds, $course->id);
+			array_push($courseNames, $course->name);
+		}
 
-		$f3->set('user', $user);
-		$f3->set('data', $data);
+		$enrollments = getEnrollments($key, $courseIds[0]);
+		
+		// for every enrollment, get the userid, name, and grade
+		foreach($enrollments as $enrollment)
+		{	
+			// make sure the enrollment role is not a teacher
+			if($enrollment->role != 'TeacherEnrollment')
+			{
+				array_push($userIds, $enrollment->user_id);
+				array_push($names, $enrollment->user->name);
+				array_push($grades, $enrollment->grades->final_score);
+			}
+		}
+
 		$f3->set('grades', $grades);
-		$f3->set('names', array_unique($names));
+		$f3->set('names', $names);
+		$f3->set('courseName', $courseNames[0]);
+		$f3->set('user', $user);
 
 		echo Template::instance()->render('view/index.html');
 	});
