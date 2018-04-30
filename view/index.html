@@ -9,10 +9,14 @@
 </head>
 <body>
     <include href="/view/includes/sidebar.html">
-     <!--{{ print_r(@data) }} !-->
 
     <div class="container" id="content">
-        <include href="view/reports/grade-report.html">
+        <check if="{{ @page }} == 'grades'">
+            <include href="view/reports/grade-report.html">
+        </check>
+        <check if="{{ @page }} == 'assignments'">
+            <include href="view/reports/assignment-reports.html">
+        </check>
     </div>
 
     <include href="/view/includes/javascripts.html">
