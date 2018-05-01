@@ -18,7 +18,7 @@
 		$f3->reroute('/report/grades');
 	});
 
-	// define a default route
+	// report routes. Takes a parameter to determine what time of report to display
 	$f3->route('GET /report/@report', function($f3, $params) {
 		include("model/apiRequests.php");
 
@@ -28,7 +28,6 @@
 		new UserDB();
 		$user = unserialize($_SESSION['user']);
 		$page = $params['report'];
-
 
 		$f3->set('user', $user);
 		$f3->set('page', $page);
