@@ -38,6 +38,9 @@
 		$userIds = array();
 		$courseIds = array();
 		$courseNames = array();
+		
+		$json = array();
+		$data = array();
 
 		$index = $params['id'];
 
@@ -56,16 +59,20 @@
 
 			// make sure the enrollment role is not a teacher
 			if($enrollment->role != 'TeacherEnrollment')
-			{
-				array_push($userIds, $enrollment->user_id);
-				array_push($names, $enrollment->user->name);
-				array_push($grades, $enrollment->grades->final_score);
+			{	
+				$json = array("id" => $enrollment->user_id, 
+							  "name" => $enrollment->user->name, 
+							  "grade" => $enrollment->grades->final_score);
+
+				array_push($data, $json);
 			}
 		}
 
-		$f3->set('user', $user);
-		$f3->set('grades', $grades);
-		$f3->set('names', $names);
+		//$f3->set('user', $user);
+		//$f3->set('grades', $grades);
+		//$f3->set('names', $names);
+
+		$f3->set('data', $data);
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
 

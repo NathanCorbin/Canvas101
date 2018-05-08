@@ -4,16 +4,36 @@
 
 <script>
 
+    function sortJSON(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    }
+
     var ctx = document.getElementById("myChart").getContext('2d');
     ctx.canvas.width = 300;
     ctx.canvas.height = 400;
+
+    var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
+    data = sortJSON(data, 'grade');
+
+    var grades = data.map(function(e) {
+       return e.grade;
+    });
+
+    var names = data.map(function(e) {
+        return e.name;
+    });
+
+    
     var myChart = new Chart(ctx, {
         type: 'horizontalBar',
         data: {
-            labels: {{ json_encode(@names, JSON_PRETTY_PRINT) }},
+            labels: names,
     datasets: [{
         label: '{{ @courseName }}',
-        data: {{ json_encode(@grades, JSON_PRETTY_PRINT) }},
+        data: grades,
     backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
