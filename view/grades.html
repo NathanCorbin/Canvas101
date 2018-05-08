@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Course Grades</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ @BASE }}/view/styles/page.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+    <include href="/view/includes/sidebar.html">
+
+    <div class="container" id="content">
+        
+        <p class="lead text-center">Grade Report for {{ @courseName }}</p>
+        <include href="/view/reports/grade-report.html">
+
+        <div id="courses">
+            <repeat group="{{ @courseNameList }}" value="{{ @course }}">
+                <button class="btn btn-primary" type="button">{{ @course }}</button>
+            </repeat>
+        </div>
+    </div>
+
+    <include href="/view/includes/javascripts.html">
+</body>
+</html>

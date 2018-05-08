@@ -15,73 +15,68 @@
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
 
-		$f3->reroute('/report/grades');
+		$f3->reroute('/reports/grades/0');
 	});
 
 	// report routes. Takes a parameter to determine what time of report to display
-	$f3->route('GET /report/@report', function($f3, $params) {
+	$f3->route('GET /reports/grades/@id', function($f3, $params) {
 		include("model/apiRequests.php");
 
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
 
-		new UserDB();
+		//new UserDB();
 		$user = unserialize($_SESSION['user']);
-		$page = $params['report'];
+
+		$key = $user->getAccessKey();
+
+		// get all the courses
+		$courses = getCourses($key);
+
+		$names = array();
+		$grades = array();
+		$userIds = array();
+		$courseIds = array();
+		$courseNames = array();
+
+		$index = $params['id'];
+
+		// for every course, get the id and the name
+		foreach($courses as $course)
+		{
+			array_push($courseIds, $course->id);
+			array_push($courseNames, $course->name);
+		}
+
+		$enrollments = getEnrollments($key, $courseIds[$index]);
+		
+		// for every enrollment, get the userid, name, and grade
+		foreach($enrollments as $enrollment)
+		{
+
+			// make sure the enrollment role is not a teacher
+			if($enrollment->role != 'TeacherEnrollment')
+			{
+				array_push($userIds, $enrollment->user_id);
+				array_push($names, $enrollment->user->name);
+				array_push($grades, $enrollment->grades->final_score);
+			}
+		}
 
 		$f3->set('user', $user);
-		$f3->set('page', $page);
+		$f3->set('grades', $grades);
+		$f3->set('names', $names);
+		$f3->set('courseName', $courseNames[$index]);
+		$f3->set('courseNameList', $courseNames);
 
-		if($page == 'grades')
-		{
-			$key = $user->getAccessKey();
+		echo Template::instance()->render('view/grades.html');
+	});
 
-			// get all the courses
-			$courses = getCourses($key);
+	$f3->route('GET|POST /reports/assignments', function($f3){
 
-			$names = array();
-			$grades = array();
-			$userIds = array();
-			$courseIds = array();
-			$courseNames = array();
 
-			// for every course, get the id and the name
-			foreach($courses as $course)
-			{
-				array_push($courseIds, $course->id);
-				array_push($courseNames, $course->name);
-			}
 
-			$enrollments = getEnrollments($key, $courseIds[0]);
-			
-			// for every enrollment, get the userid, name, and grade
-			foreach($enrollments as $enrollment)
-			{	
-				// make sure the enrollment role is not a teacher
-				if($enrollment->role != 'TeacherEnrollment')
-				{
-					array_push($userIds, $enrollment->user_id);
-					array_push($names, $enrollment->user->name);
-					array_push($grades, $enrollment->grades->final_score);
-				}
-			}
-
-			$f3->set('grades', $grades);
-			$f3->set('names', $names);
-			$f3->set('courseName', $courseNames[0]);
-
-			echo Template::instance()->render('view/index.html');	
-		}
-		
-		else if($page == 'assignments')
-		{
-			echo Template::instance()->render('view/index.html');	
-		}
-
-		else 
-		{
-			echo "error";
-		}
+		echo Template::instance()->render('view/assignments.html');
 	});
 
 	$f3->route('GET|POST /login', function($f3){
