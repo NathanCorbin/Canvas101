@@ -1,7 +1,5 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-
 <canvas id="myChart"></canvas>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script>
 
     function sortJSON(array, key) {
@@ -18,68 +16,45 @@
     var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
     data = sortJSON(data, 'grade');
 
-    var grades = data.map(function(e) {
-       return e.grade;
+    var grades = data.map(function(element) {
+       return element.grade;
     });
 
-    var names = data.map(function(e) {
-        return e.name;
+    var names = data.map(function(element) {
+        return element.name;
     });
 
+    const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(220, 10, 10, 0.5)' : (Math.floor(value) < 80 ? 'rgba(220, 220, 20, 0.5)' : 'rgba(10, 220, 10, 0.5)'));
+    const borderColors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(180, 10, 10, 1)' : (Math.floor(value) < 80 ? 'rgba(190, 190, 20, 1)' : 'rgba(10, 190, 10, 1)'));
     
     var myChart = new Chart(ctx, {
         type: 'horizontalBar',
         data: {
             labels: names,
-    datasets: [{
-        label: '{{ @courseName }}',
-        data: grades,
-    backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)'
-    ],
-        borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)'
-    ],
-        borderWidth: 1
-    }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }],
-            xAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
+            datasets: [{
+                label: '{{ @courseName }}',
+                data: grades,
+                backgroundColor: colors,
+                borderColor: borderColors,
+                borderWidth: 2
             }]
         },
-        responsive:true,
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            },
+            responsive:true,
             maintainAspectRatio: this.maintainAspectRatio
-    }
+        }
     });
-
-
+    
 </script>
