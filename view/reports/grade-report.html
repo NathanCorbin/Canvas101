@@ -27,12 +27,13 @@
     const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(220, 10, 10, 0.5)' : (Math.floor(value) < 80 ? 'rgba(220, 220, 20, 0.5)' : 'rgba(10, 220, 10, 0.5)'));
     const borderColors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(180, 10, 10, 1)' : (Math.floor(value) < 80 ? 'rgba(190, 190, 20, 1)' : 'rgba(10, 190, 10, 1)'));
     
+    Chart.defaults.global.legend.display = false;
+
     var myChart = new Chart(ctx, {
         type: 'horizontalBar',
         data: {
             labels: names,
             datasets: [{
-                label: '{{ @courseName }}',
                 data: grades,
                 backgroundColor: colors,
                 borderColor: borderColors,

@@ -13,13 +13,13 @@
     <include href="/view/includes/sidebar.html">
 
     <div class="container" id="content">
-        <p class="lead text-center">Grade Report for {{ @courseName }}</p>
+        <h4 class="text-center pb-3">Grade Report for {{ @courseName }}</h4>
         
         <include href="/view/reports/grade-report.html">
 
         <div id="courses">
             <repeat group="{{ @courseNameList }}" value="{{ @course }}">
-                <button class="btn btn-primary" type="button">{{ @course }}</button>
+                <button class="btn btn-secondary mr-2 mt-3" type="button">{{ @course }}</button>
             </repeat>
         </div>
     </div>

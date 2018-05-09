@@ -28,49 +28,58 @@
 		//new UserDB();
 		$user = unserialize($_SESSION['user']);
 
-		$key = $user->getAccessKey();
-
-		// get all the courses
-		$courses = getCourses($key);
-
-		$names = array();
-		$grades = array();
-		$userIds = array();
 		$courseIds = array();
 		$courseNames = array();
 		
 		$json = array();
 		$data = array();
 
+		// get the index from the url
 		$index = $params['id'];
 
-		// for every course, get the id and the name
-		foreach($courses as $course)
+		// check if gradeJSON session exists for particular index
+		// if it doesn't, call the api and parse the data
+		// and set the json to the session
+		if(!isset($_SESSION['gradeJSON-'.$index]))
 		{
-			array_push($courseIds, $course->id);
-			array_push($courseNames, $course->name);
-		}
+			$key = $user->getAccessKey();
 
-		$enrollments = getEnrollments($key, $courseIds[$index]);
-		
-		// for every enrollment, get the userid, name, and grade
-		foreach($enrollments as $enrollment)
-		{
+			// get all the courses
+			$courses = getCourses($key);
 
-			// make sure the enrollment role is not a teacher
-			if($enrollment->role != 'TeacherEnrollment')
-			{	
-				$json = array("id" => $enrollment->user_id, 
-							  "name" => $enrollment->user->name, 
-							  "grade" => $enrollment->grades->final_score);
-
-				array_push($data, $json);
+			// for every course, get the id and the name
+			foreach($courses as $course)
+			{
+				array_push($courseIds, $course->id);
+				array_push($courseNames, $course->name);
 			}
-		}
 
-		//$f3->set('user', $user);
-		//$f3->set('grades', $grades);
-		//$f3->set('names', $names);
+			$enrollments = getEnrollments($key, $courseIds[$index]);
+			
+			// for every enrollment, get the userid, name, and grade
+			foreach($enrollments as $enrollment)
+			{
+
+				// make sure the enrollment role is not a teacher
+				if($enrollment->role != 'TeacherEnrollment')
+				{	
+					$json = array("id" => $enrollment->user_id, 
+								  "name" => $enrollment->user->name, 
+								  "grade" => $enrollment->grades->final_score);
+
+					array_push($data, $json);
+				}
+			}
+
+			$_SESSION['courseNames'] = $courseNames;
+			$_SESSION['gradeJSON-'.$index] = $data;
+		}
+		
+		// session json already exisits, so use it
+		else {
+			$courseNames = $_SESSION['courseNames'];
+			$data = $_SESSION['gradeJSON-'.$index];
+		}
 
 		$f3->set('data', $data);
 		$f3->set('courseName', $courseNames[$index]);
@@ -80,8 +89,9 @@
 	});
 
 	$f3->route('GET|POST /reports/assignments', function($f3){
+		include("model/apiRequests.php");
 
-
+		$user = unserialize($_SESSION['user']);
 
 		echo Template::instance()->render('view/assignments.html');
 	});
