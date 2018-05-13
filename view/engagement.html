@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Engagement Report</title>
+    <include href="/view/includes/styles.html">
+</head>
+<body>
+    <include href="/view/includes/sidebar.html">
+
+    <div class="container" >
+
+        <h4 class="text-center pb-3">Engagement Report</h4>
+
+        <table class="table table-striped" id="engagementTable">
+            <thead>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Last Login</th>
+            </thead>
+            <tbody>
+                <repeat group="{{ @data }}" value="{{ @row }}">
+                    <tr>
+                        <td>{{ @row['id'] }}</td>
+                        <td>{{ @row['name'] }}</td>
+
+                        <check if="{{ @row['lastLogin'] == '' }}">
+                            <true>
+                                <td class="text-danger" width="20%">Never Logged In</td>
+                            </true>
+                            <false>
+                                <td width="20%">{{ @row['lastLogin'] }}</td>
+                            </false>
+                        </check>
+                    </tr>
+                </repeat>
+            </tbody>
+        </table>
+    </div>
+
+    <include href="/view/includes/javascripts.html">
+
+</body>
+</html>

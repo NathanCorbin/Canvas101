@@ -89,11 +89,58 @@
 	});
 
 	$f3->route('GET|POST /reports/assignments', function($f3){
+
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
+
 		include("model/apiRequests.php");
+
 
 		$user = unserialize($_SESSION['user']);
 
 		echo Template::instance()->render('view/assignments.html');
+	});
+
+	$f3->route('GET|POST /reports/engagement/@id', function($f3, $params){
+		
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
+
+		include("model/apiRequests.php");
+
+		$user = unserialize($_SESSION['user']);
+		$key = $user->getAccessKey();
+
+		$index = $params['id'];
+
+		$courses = getCourses($key);
+
+		$json = array();
+		$data = array();
+		$courseIds = array();
+
+		foreach($courses as $course)
+		{
+			array_push($courseIds, $course->id);
+		}
+
+		$enrollments = getEnrollments($key, $courseIds[$index]);
+
+		foreach($enrollments as $enrollment)
+		{
+			if($enrollment->role != 'TeacherEnrollment')
+			{
+				$json = array('id' => $enrollment->user_id,
+							  'name' => $enrollment->user->name,
+							  'lastLogin' => $enrollment->last_activity_at);
+
+				array_push($data, $json);
+			}
+		}
+
+		$f3->set('data', $data);
+
+		echo Template::instance()->render('view/engagement.html');
 	});
 
 	$f3->route('GET|POST /login', function($f3){
