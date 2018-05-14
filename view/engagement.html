@@ -16,6 +16,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Last Login</th>
+                <th scope="col">Total Activity Time</th>
             </thead>
             <tbody>
                 <repeat group="{{ @data }}" value="{{ @row }}">
@@ -31,6 +32,7 @@
                                 <td class="clickable" width="20%">{{ @row['lastLogin'] }}</td>
                             </false>
                         </check>
+                        <td>{{ @row['activityTime'] }} minutes</td>
                     </tr>
                 </repeat>
             </tbody>

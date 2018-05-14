@@ -113,6 +113,8 @@
 
 		$index = $params['id'];
 
+		if(!isset($_SESSION['engagement-'.$index]))
+		{
 			$courses = getCourses($key);
 
 			$json = array();
@@ -135,12 +137,18 @@
 					$json = array('id' => $enrollment->user_id,
 								  'name' => $enrollment->user->name,
 								  'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
-								  'daysElapsed' => $daysElapsed->d);
+								  'daysElapsed' => $daysElapsed->d,
+								  'activityTime' => floor($enrollment->total_activity_time / 60)); 
 
 					array_push($data, $json);
 				}
 			}
-		
+		}
+
+		else
+		{
+			$data = $_SESSION['engagement-'.$index];
+		}
 
 		$f3->set('data', $data);
 
