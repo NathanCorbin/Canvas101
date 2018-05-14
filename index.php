@@ -113,30 +113,34 @@
 
 		$index = $params['id'];
 
-		$courses = getCourses($key);
+			$courses = getCourses($key);
 
-		$json = array();
-		$data = array();
-		$courseIds = array();
+			$json = array();
+			$data = array();
+			$courseIds = array();
 
-		foreach($courses as $course)
-		{
-			array_push($courseIds, $course->id);
-		}
-
-		$enrollments = getEnrollments($key, $courseIds[$index]);
-
-		foreach($enrollments as $enrollment)
-		{
-			if($enrollment->role != 'TeacherEnrollment')
+			foreach($courses as $course)
 			{
-				$json = array('id' => $enrollment->user_id,
-							  'name' => $enrollment->user->name,
-							  'lastLogin' => $enrollment->last_activity_at);
-
-				array_push($data, $json);
+				array_push($courseIds, $course->id);
 			}
-		}
+
+			$enrollments = getEnrollments($key, $courseIds[$index]);
+
+			foreach($enrollments as $enrollment)
+			{
+				if($enrollment->role != 'TeacherEnrollment')
+				{
+					$daysElapsed = date_diff(new DateTime(explode('T', $enrollment->last_activity_at)[0]), new DateTime(date('Y-m-d')));
+
+					$json = array('id' => $enrollment->user_id,
+								  'name' => $enrollment->user->name,
+								  'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
+								  'daysElapsed' => $daysElapsed->d);
+
+					array_push($data, $json);
+				}
+			}
+		
 
 		$f3->set('data', $data);
 

@@ -7,11 +7,11 @@
 <body>
     <include href="/view/includes/sidebar.html">
 
-    <div class="container" >
+    <div class="container" id="content">
 
         <h4 class="text-center pb-3">Engagement Report</h4>
 
-        <table class="table table-striped" id="engagementTable">
+        <table class="table table-hover" id="engagementTable" bgcolor="#eee">
             <thead>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
@@ -20,21 +20,25 @@
             <tbody>
                 <repeat group="{{ @data }}" value="{{ @row }}">
                     <tr>
-                        <td>{{ @row['id'] }}</td>
-                        <td>{{ @row['name'] }}</td>
+                        <td class="clickable">{{ @row['id'] }}</td>
+                        <td class="clickable">{{ @row['name'] }}</td>
 
                         <check if="{{ @row['lastLogin'] == '' }}">
                             <true>
-                                <td class="text-danger" width="20%">Never Logged In</td>
+                                <td class="text-danger clickable" width="20%">Never Logged In</td>
                             </true>
                             <false>
-                                <td width="20%">{{ @row['lastLogin'] }}</td>
+                                <td class="clickable" width="20%">{{ @row['lastLogin'] }}</td>
                             </false>
                         </check>
                     </tr>
                 </repeat>
             </tbody>
         </table>
+        
+        <include href="/view/includes/modal.html">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#engagementModal" id="showModal"></button>
+        
     </div>
 
     <include href="/view/includes/javascripts.html">

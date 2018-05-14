@@ -107,3 +107,7 @@ a, a:hover, a:focus {
 	position: fixed;
 	bottom: 0;
 }
+
+#showModal {
+    display: none;
+}
