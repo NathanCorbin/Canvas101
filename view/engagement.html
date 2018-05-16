@@ -7,39 +7,58 @@
 <body>
     <include href="/view/includes/sidebar.html">
 
-    <div class="container" id="content">
+    <div class="container">
 
-        <h4 class="text-center pb-3">Engagement Report</h4>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-md-10">
+                <table class="table table-hover" id="engagementTable" >
+                    <thead>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Last Login</th>
+                        <th scope="col">Activity Time</th>
+                        <th scope="col">Email</th>
+                    </thead>
+                    <tbody>
+                        <repeat group="{{ @data }}" value="{{ @row }}">
+                            <tr>
+                                <td class="clickable">{{ @row['id'] }}</td>
+                                <td class="clickable">{{ @row['name'] }}</td>
 
-        <table class="table table-hover" id="engagementTable" bgcolor="#eee">
-            <thead>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Last Login</th>
-                <th scope="col">Total Activity Time</th>
-            </thead>
-            <tbody>
-                <repeat group="{{ @data }}" value="{{ @row }}">
-                    <tr>
-                        <td class="clickable">{{ @row['id'] }}</td>
-                        <td class="clickable">{{ @row['name'] }}</td>
-
-                        <check if="{{ @row['lastLogin'] == '' }}">
-                            <true>
-                                <td class="text-danger clickable" width="20%">Never Logged In</td>
-                            </true>
-                            <false>
-                                <td class="clickable" width="20%">{{ @row['lastLogin'] }}</td>
-                            </false>
-                        </check>
-                        <td>{{ @row['activityTime'] }} minutes</td>
-                    </tr>
-                </repeat>
-            </tbody>
-        </table>
-        
-        <include href="/view/includes/modal.html">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#engagementModal" id="showModal"></button>
+                                <check if="{{ @row['lastLogin'] == '' }}">
+                                    <true>
+                                        <td class="text-danger clickable" width="20%">Never Logged In</td>
+                                    </true>
+                                    <false>
+                                        <check if="{{ @row['daysElapsed'] == 0 }}">
+                                            <true>
+                                                <td class="clickable" width="20%">Today</td>
+                                            </true>
+                                            <false>
+                                                <check if="{{ @row['daysElapsed'] == 1 }}">
+                                                    <true>
+                                                        <td class="clickable" width="20%">{{ @row['daysElapsed'] }} day ago</td>
+                                                    </true>
+                                                    <false>
+                                                        <td class="clickable" width="20%">{{ @row['daysElapsed'] }} days ago</td>
+                                                    </false>
+                                                </check>
+                                            </false>
+                                        </check>
+                                    </false>
+                                </check>
+                                <td width="20%">{{ @row['activityTime'] }} minutes</td>
+                                <td class="text-center" width="5%"><a href="mailto:{{ @row['email'] }}"><i class="fas fa-envelope-open"></i></a></td>
+                            </tr>
+                        </repeat>
+                    </tbody>
+                </table>
+                
+                <include href="/view/includes/modal.html">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#engagementModal" id="showModal"></button>
+            </div>
+        </div>
         
     </div>
 

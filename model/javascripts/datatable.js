@@ -1,5 +1,7 @@
 $(document).ready(function() {
-    $('#engagementTable').DataTable();
+    $('#engagementTable').DataTable({
+        "bUseRendered": true
+    });
 
     $('.clickable').click(function(){
     	var row = $(this).closest('tr');

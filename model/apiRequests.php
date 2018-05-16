@@ -30,7 +30,7 @@
 	 */
 	function getEnrollments($access_key, $courseId)
 	{
-		$url = "https://canvas.instructure.com/api/v1/courses/".$courseId."/enrollments?access_token=".$access_key;
+		$url = "https://canvas.instructure.com/api/v1/courses/".$courseId."/enrollments?access_token=".$access_key."&per_page=100";
 
 		$curl = new Curl();
 		$curl->get($url);

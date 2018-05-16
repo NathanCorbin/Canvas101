@@ -55,7 +55,7 @@
 			}
 
 			$enrollments = getEnrollments($key, $courseIds[$index]);
-			
+
 			// for every enrollment, get the userid, name, and grade
 			foreach($enrollments as $enrollment)
 			{
@@ -127,7 +127,7 @@
 			}
 
 			$enrollments = getEnrollments($key, $courseIds[$index]);
-
+			
 			foreach($enrollments as $enrollment)
 			{
 				if($enrollment->role != 'TeacherEnrollment')
@@ -138,7 +138,8 @@
 								  'name' => $enrollment->user->name,
 								  'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
 								  'daysElapsed' => $daysElapsed->d,
-								  'activityTime' => floor($enrollment->total_activity_time / 60)); 
+								  'activityTime' => floor($enrollment->total_activity_time / 60),
+								  'email' => $enrollment->user->login_id);
 
 					array_push($data, $json);
 				}
@@ -184,7 +185,7 @@
 
 	$f3->route('GET|POST /logout', function($f3){
 		if(isset($_SESSION['user']))
-			unset($_SESSION['user']);
+			$_SESSION = array();
 
 		$f3->reroute('/login');
 	});

@@ -8,16 +8,28 @@
 <body>
     <include href="/view/includes/sidebar.html">
 
-    <div class="container" id="content">
+    <div class="container">
         <h4 class="text-center pb-3">Grade Report for {{ @courseName }}</h4>
         
-        <include href="/view/reports/grade-report.html">
-
-        <div id="courses">
-            <repeat group="{{ @courseNameList }}" value="{{ @course }}">
-                <button class="btn btn-secondary mr-2 mt-3" type="button">{{ @course }}</button>
-            </repeat>
+        <div class="dropdown" id="courseDropDown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">Course List</button>
+            <div class="dropdown-menu">
+                <div id="courses">
+                    <repeat group="{{ @courseNameList }}" value="{{ @course }}">
+                        <i class="dropdown-item course">{{ @course }}</i>
+                    </repeat>
+                </div>
+            </div>
         </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-md-10">
+                <include href="/view/reports/grade-report.html">
+            </div>
+        </div>
+
     </div>
 
     <include href="/view/includes/javascripts.html">

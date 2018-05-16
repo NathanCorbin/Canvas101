@@ -10,8 +10,8 @@
     }
 
     var ctx = document.getElementById("myChart").getContext('2d');
-    ctx.canvas.width = 300;
-    ctx.canvas.height = 400;
+    ctx.canvas.width = 125;
+    ctx.canvas.height = 125;
 
     var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
     data = sortJSON(data, 'grade');
@@ -24,8 +24,11 @@
         return element.name;
     });
 
-    const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(220, 10, 10, 0.5)' : (Math.floor(value) < 80 ? 'rgba(220, 220, 20, 0.5)' : 'rgba(10, 220, 10, 0.5)'));
-    const borderColors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(180, 10, 10, 1)' : (Math.floor(value) < 80 ? 'rgba(190, 190, 20, 1)' : 'rgba(10, 190, 10, 1)'));
+    const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(220, 10, 10, 0.5)' 
+                                        : (Math.floor(value) < 80 ? 'rgba(220, 220, 20, 0.5)' : 'rgba(10, 220, 10, 0.5)'));
+    
+    const borderColors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(180, 10, 10, 1)' 
+                                        : (Math.floor(value) < 80 ? 'rgba(190, 190, 20, 1)' : 'rgba(10, 190, 10, 1)'));
     
     Chart.defaults.global.legend.display = false;
 
@@ -54,7 +57,7 @@
                 }]
             },
             responsive:true,
-            maintainAspectRatio: this.maintainAspectRatio
+            maintainAspectRatio: true
         }
     });
     
