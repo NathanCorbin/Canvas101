@@ -33,22 +33,22 @@
                                     <false>
                                         <check if="{{ @row['daysElapsed'] == 0 }}">
                                             <true>
-                                                <td class="clickable" width="20%">Today</td>
+                                                <td class="clickable" width="25%">Today at {{ @row['time'] }}</td>
                                             </true>
                                             <false>
                                                 <check if="{{ @row['daysElapsed'] == 1 }}">
                                                     <true>
-                                                        <td class="clickable" width="20%">{{ @row['daysElapsed'] }} day ago</td>
+                                                        <td class="clickable" width="25%">{{ @row['daysElapsed'] }} day ago</td>
                                                     </true>
                                                     <false>
-                                                        <td class="clickable" width="20%">{{ @row['daysElapsed'] }} days ago</td>
+                                                        <td class="clickable" width="25%">{{ @row['daysElapsed'] }} days ago</td>
                                                     </false>
                                                 </check>
                                             </false>
                                         </check>
                                     </false>
                                 </check>
-                                <td width="20%">{{ @row['activityTime'] }} minutes</td>
+                                <td class="clickable" width="20%">{{ @row['activityTime'] }} minutes</td>
                                 <td class="text-center" width="5%"><a href="mailto:{{ @row['email'] }}"><i class="fas fa-envelope-open"></i></a></td>
                             </tr>
                         </repeat>

@@ -10,10 +10,11 @@
     }
 
     var ctx = document.getElementById("myChart").getContext('2d');
-    ctx.canvas.width = 125;
-    ctx.canvas.height = 125;
+    ctx.canvas.width = 100;
+    ctx.canvas.height = 40;
 
     var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
+    
     data = sortJSON(data, 'grade');
 
     var grades = data.map(function(element) {
@@ -24,6 +25,8 @@
         return element.name;
     });
 
+
+
     const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(220, 10, 10, 0.5)' 
                                         : (Math.floor(value) < 80 ? 'rgba(220, 220, 20, 0.5)' : 'rgba(10, 220, 10, 0.5)'));
     
@@ -33,7 +36,7 @@
     Chart.defaults.global.legend.display = false;
 
     var myChart = new Chart(ctx, {
-        type: 'horizontalBar',
+        type: 'bar',
         data: {
             labels: names,
             datasets: [{
@@ -52,12 +55,13 @@
                 }],
                 xAxes: [{
                     ticks: {
-                        beginAtZero:true
+                        beginAtZero:true,
+                        autoSkip: false
                     }
                 }]
             },
             responsive:true,
-            maintainAspectRatio: true
+            maintainAspectRatio: true,
         }
     });
     

@@ -88,6 +88,7 @@
 		echo Template::instance()->render('view/grades.html');
 	});
 
+	// assignment report route
 	$f3->route('GET|POST /reports/assignments', function($f3){
 
 		if(!isset($_SESSION['user']))
@@ -127,23 +128,39 @@
 			}
 
 			$enrollments = getEnrollments($key, $courseIds[$index]);
+			date_default_timezone_set('America/Los_Angeles');
 			
 			foreach($enrollments as $enrollment)
 			{
 				if($enrollment->role != 'TeacherEnrollment')
 				{
-					$daysElapsed = date_diff(new DateTime(explode('T', $enrollment->last_activity_at)[0]), new DateTime(date('Y-m-d')));
+					// get the current date, and the last login date
+					$currentDate = new DateTime(date('Y-m-d'));
+					$dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
+					
+					// calculate the date difference between now and when they last logged in
+					$daysElapsed = date_diff($currentDate, $dateLoggedIn);
 
+					// get the time in which they logged in and format 
+					// it in a way that is easily readable
+					$time = $enrollment->last_activity_at;
+					$time = date('h:i a', strtotime($time));
+
+					// get remaining information from json
 					$json = array('id' => $enrollment->user_id,
 								  'name' => $enrollment->user->name,
 								  'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
+								  'time' => $time,
 								  'daysElapsed' => $daysElapsed->d,
 								  'activityTime' => floor($enrollment->total_activity_time / 60),
 								  'email' => $enrollment->user->login_id);
 
+					// add json data to array
 					array_push($data, $json);
 				}
 			}
+
+			$_SESSION['engagement-'.$index] = $data;
 		}
 
 		else
@@ -155,6 +172,7 @@
 
 		echo Template::instance()->render('view/engagement.html');
 	});
+
 
 	$f3->route('GET|POST /login', function($f3){
 
