@@ -120,9 +120,12 @@ a, a:hover, a:focus {
 
 #courseDropDown {
     text-align: right;
-    padding-bottom: 2em;
+}
+
+#refreshApi {
+    margin-left: 1em;
 }
 
 html {
     font-size: 1rem;
-  }
+}
