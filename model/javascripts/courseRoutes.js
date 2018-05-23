@@ -11,3 +11,14 @@ for (var i = 0, len = g.children.length; i < len; i++)
         }    
     })(i);
 }
+
+$("#refreshApi").on("click", function(){
+    $.ajax({
+        type: "POST",
+        data: {"refresh": true},
+        dataType: "text",
+        success: function(data) {
+            location.href = window.location.href;
+        }, 
+    });
+});

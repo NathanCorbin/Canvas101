@@ -19,11 +19,12 @@
 	});
 
 	// report routes. Takes a parameter to determine what time of report to display
-	$f3->route('GET /reports/grades/@id', function($f3, $params) {
+	$f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
 		include("model/apiRequests.php");
 
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
+
 
 		//new UserDB();
 		$user = unserialize($_SESSION['user']);
@@ -79,6 +80,15 @@
 		else {
 			$courseNames = $_SESSION['courseNames'];
 			$data = $_SESSION['gradeJSON-'.$index];
+		}
+
+		if(isset($_POST['refresh']))
+		{
+			unset($_SESSION['courseNames']);
+			unset($_SESSION['gradeJSON-'.$index]);
+			unset($_POST['refresh']);
+			
+			$f3->reroute('/reports/grades/0');
 		}
 
 		$f3->set('data', $data);
