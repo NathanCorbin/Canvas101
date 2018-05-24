@@ -1,13 +1,25 @@
+
+
 .material-icons {
     margin: 0 15px 0 0 !important;
 }
 
 .container {
     padding-left: 300px;
+    max-width: 1580px !important;
 }
 
 @media only screen and (max-width : 992px) {
     .container {
         padding-left: 0;
     }
+}
+
+#courseList {
+    margin-right: 2em;
+    position: relative;
+}
+
+#refreshApi {
+    position: relative;
 }

@@ -1,6 +1,7 @@
 body {
   background-color: #eee !important;
   text-shadow: 0 .05rem .1rem rgba(0,0,0,.3);
+  padding-top: 3em;
 }
 
 #page{
@@ -23,16 +24,6 @@ input, button, form {
   max-width: 332px !important;
 }
 
-.jumbotron {
-  max-width: 546px;
-  max-height: 360px;
-  margin: 0 auto;
-}
-
 h2 {
   padding-bottom: 5px !important;
-}
-
-button {
-  margin-top: 3px;
 }

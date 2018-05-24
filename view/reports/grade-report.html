@@ -34,7 +34,7 @@
     Chart.defaults.global.legend.display = false;
 
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'horizontalBar',
         data: {
             labels: names,
             datasets: [{
@@ -59,7 +59,7 @@
                 }]
             },
             responsive:true,
-            maintainAspectRatio: true,
+            
         }
     });
     
