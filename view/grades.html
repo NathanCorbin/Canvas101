@@ -8,8 +8,8 @@
 <body>
     <include href="/view/includes/sidebar.html">
 
-    <div class="content">
-        <h1 class="text-center display-4">Grade Report for {{ @courseName }}</h1>
+    <div class="container">
+        <h1 class="text-center display-4" id="header">Grade Report for {{ @courseName }}</h1>
     
         <div class="row">
             <div class="col-md-10"></div>
@@ -24,9 +24,8 @@
                                 </repeat>
                             </div>
                         </div>
+                        <button class="btn btn-secondary" name="refreshApi" type="button" id="refreshApi"><i class="fa fa-refresh"></i></button>
                     </div> 
-                    
-                    <button class="btn btn-secondary" name="refreshApi" type="button" id="refreshApi"><i class="fa fa-refresh"></i></button>
                 </div>
             </div>
         </div>

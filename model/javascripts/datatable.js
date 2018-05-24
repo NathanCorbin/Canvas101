@@ -1,6 +1,10 @@
 $(document).ready(function() {
     var table = $('#engagementTable').DataTable({
-        "bUseRendered": true
+        columnDefs: 
+            [{ 
+                type: 'natural', targets: [0, 1, 2, 3, 4] 
+            }],
+        aaSorting: [[3, 'desc']]
     });
 
     $('#engagementTable tbody').on( 'click', 'tr', '.clickable', function () {

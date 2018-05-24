@@ -3,19 +3,34 @@
 <head>
 	<title>Course Grades</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ @BASE }}/view/styles/page.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <include href="/view/includes/styles.html">
 </head>
 <body>
-    <include href="/view/includes/sidebar.html">
+    <include href="/view/includes/sidebar.html"></include>
 
     <div class="container">
         
-        <include href="/view/reports/assignment-reports.html">
-
+        <!-- <include href="/view/reports/assignment-reports.html"> !-->
+        <div id="assignments">
+            <table class="table table-hover">
+                <thead>
+                    <th>Title</th>
+                    <th>Points Possible</th>
+                    <th>Due Date</th>
+                    <th>Has Submitted</th>
+                </thead>
+                <tbody>
+                    <repeat group="{{ @data }}" value="{{ @row }}">
+                        <tr>
+                            <td>{{ @row['title'] }}</td>
+                            <td>{{ @row['points'] }}</td>
+                            <td>{{ @row['due_date'] }}</td>
+                            <td>{{ @row['status'] }}</td>
+                        </tr>
+                    </repeat>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <include href="/view/includes/javascripts.html">

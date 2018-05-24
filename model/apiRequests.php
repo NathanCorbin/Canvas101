@@ -50,9 +50,7 @@
 	 * @param $userId the id of the student
 	 */
 	function getAssignments($access_key, $courseId, $userId)
-	{
-        $userIds = getUserIDs($access_key);
-     	
+	{     	
      	$url = "https://canvas.instructure.com/api/v1/courses/$courseId/analytics/users/$userId/assignments?access_token=$access_key";
 
      	$curl = new Curl();

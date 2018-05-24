@@ -88,7 +88,7 @@
 			unset($_SESSION['gradeJSON-'.$index]);
 			unset($_POST['refresh']);
 			
-			$f3->reroute('/reports/grades/0');
+			$f3->reroute('/reports/grades/'.$index);
 		}
 
 		$f3->set('data', $data);
@@ -105,9 +105,34 @@
 			$f3->reroute('/login');
 
 		include("model/apiRequests.php");
-
-
 		$user = unserialize($_SESSION['user']);
+		$key = $user->getAccessKey();
+
+		$json = array();
+		$data = array();
+		$courseIds = array();
+		
+		$courses = getCourses($key);
+
+		foreach($courses as $course)
+		{
+			array_push($courseIds, $course->id);
+			//array_push($courseNames, $course->name);
+		}
+
+		$assignments = getAssignments($key, $courseIds[1], 14407802);
+
+		foreach($assignments as $assignment)
+		{
+			$json = array('title' => $assignment->title,
+						  'points' => $assignment->points_possible,
+						  'due_date' => $assignment->due_at,
+						  'status' => $assignment->has_submitted_submissions);
+						  
+			array_push($data, $json);
+		}
+
+		$f3->set('data', $data);
 
 		echo Template::instance()->render('view/assignments.html');
 	});
@@ -131,10 +156,12 @@
 			$json = array();
 			$data = array();
 			$courseIds = array();
+			$courseNames = array();
 
 			foreach($courses as $course)
 			{
 				array_push($courseIds, $course->id);
+				array_push($courseNames, $course->name);
 			}
 
 			$enrollments = getEnrollments($key, $courseIds[$index]);
@@ -178,6 +205,14 @@
 			$data = $_SESSION['engagement-'.$index];
 		}
 
+		if(isset($_POST['refresh']))
+		{
+			unset($_SESSION['engagement-'.$index]);
+			unset($_POST['refresh']);
+			
+			$f3->reroute('/reports/engagement/'.$index);
+		}
+
 		$f3->set('data', $data);
 
 		echo Template::instance()->render('view/engagement.html');
@@ -213,7 +248,7 @@
 
 	$f3->route('GET|POST /logout', function($f3){
 		if(isset($_SESSION['user']))
-			$_SESSION = array();
+			unset($_SESSION['user']);
 
 		$f3->reroute('/login');
 	});

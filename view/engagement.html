@@ -8,8 +8,17 @@
     <include href="/view/includes/sidebar.html">
 
     <div class="container">
+        <h1 class="text-center display-4" id="header">Engagement Report for {{ @courseName }}</h1>
+
 
         <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <button class="btn btn-secondary pull-right mb-2" name="refreshApi" type="button" id="refreshApi"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <div class="row">
+            
             <div class="col-sm-2"></div>
             <div class="col-md-10">
                 <table class="table table-hover" id="engagementTable" >
