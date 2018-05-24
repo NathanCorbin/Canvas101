@@ -7,21 +7,16 @@
 <body>
     <include href="/view/includes/sidebar.html">
 
+    <div class="col s4 right" id="refreshApi">
+        <button class="btn waves-effect waves-light" name="refreshApi" id="refreshApi" type="button"><i class="material-icons left">refresh</i>Refresh</button>
+    </div>
+
     <div class="container">
-        <h1 class="text-center display-4" id="header">Engagement Report for {{ @courseName }}</h1>
-
+        <h4 class="center">Engagement Report for {{ @courseName }}</h4>
 
         <div class="row">
-            <div class="col-md-10"></div>
-            <div class="col-md-2">
-                <button class="btn btn-secondary pull-right mb-2" name="refreshApi" type="button" id="refreshApi"><i class="fa fa-refresh"></i></button>
-            </div>
-        </div>
-        <div class="row">
-            
-            <div class="col-sm-2"></div>
-            <div class="col-md-10">
-                <table class="table table-hover" id="engagementTable" >
+            <div class="col s12">
+                <table class="mdl-data-table" id="engagementTable" >
                     <thead>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
@@ -37,7 +32,7 @@
 
                                 <check if="{{ @row['lastLogin'] == '' }}">
                                     <true>
-                                        <td class="text-danger clickable" width="20%">Never Logged In</td>
+                                        <td class="text-red clickable" width="20%">Never Logged In</td>
                                     </true>
                                     <false>
                                         <check if="{{ @row['daysElapsed'] == 0 }}">
@@ -58,15 +53,16 @@
                                     </false>
                                 </check>
                                 <td class="clickable" width="20%">{{ @row['activityTime'] }} minutes</td>
-                                <td class="text-center" width="5%"><a href="mailto:{{ @row['email'] }}"><i class="fas fa-envelope-open"></i></a></td>
+                                <td class="center" width="5%"><a href="mailto:{{ @row['email'] }}"><i class="material-icons cyan-text text-darken-4">email</i></a></td>
                             </tr>
                         </repeat>
                     </tbody>
                 </table>
-                
-                <include href="/view/includes/modal.html">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#engagementModal" id="showModal"></button>
             </div>
+
+            <include href="/view/includes/modal.html">
+            
+            <button class="waves-effect waves-light btn modal-trigger" href="#engagementModal" id="showModal"></button>
         </div>
         
     </div>

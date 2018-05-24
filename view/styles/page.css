@@ -21,5 +21,12 @@
 }
 
 #refreshApi {
-    position: relative;
+    position: fixed;
+    display: block;
+    right: 0px;
+    top: 0px;
+}
+
+#showModal {
+    display: none;
 }

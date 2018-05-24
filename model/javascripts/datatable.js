@@ -2,7 +2,8 @@ $(document).ready(function() {
     var table = $('#engagementTable').DataTable({
         columnDefs: 
             [{ 
-                type: 'natural', targets: [0, 1, 2, 3, 4] 
+                type: 'natural', targets: [0, 1, 2, 3, 4],
+                className: 'mdl-data-table__cell--non-numeric'
             }],
         aaSorting: [[3, 'desc']]
     });
@@ -17,7 +18,7 @@ $(document).ready(function() {
         var lastLogin = data[2];
         var timeElapsed = data[3];
         
-        alert(id + ' ' + name + ' ' + lastLogin + ' ' + timeElapsed);
+        //alert(id + ' ' + name + ' ' + lastLogin + ' ' + timeElapsed);
     	$('#showModal').click();
     });
 });
