@@ -1,11 +1,12 @@
 $(document).ready(function() {
     var table = $('#engagementTable').DataTable({
         columnDefs: 
-            [{ 
-                type: 'natural', targets: [0, 1, 2, 3, 4],
-                className: 'mdl-data-table__cell--non-numeric'
-            }],
-        aaSorting: [[3, 'desc']]
+        [{ 
+            type: 'natural', targets: [0, 1, 2, 3, 4],
+            className: 'mdl-data-table__cell--non-numeric'
+        }],
+        aaSorting: [[3, 'desc']],
+        bLengthChange: false
     });
 
     $('#engagementTable tbody').on( 'click', 'tr', '.clickable', function () {

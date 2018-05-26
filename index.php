@@ -5,6 +5,8 @@
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 
+	date_default_timezone_set('America/Los_Angeles');
+
 	// require the autoload file
 	require_once('vendor/autoload.php');
 
@@ -120,7 +122,7 @@
 			//array_push($courseNames, $course->name);
 		}
 
-		$assignments = getAssignments($key, $courseIds[1], 14407802);
+		$assignments = getAssignments($key, $courseIds[0], 14407802);
 
 		foreach($assignments as $assignment)
 		{
@@ -165,7 +167,6 @@
 			}
 
 			$enrollments = getEnrollments($key, $courseIds[$index]);
-			date_default_timezone_set('America/Los_Angeles');
 			
 			foreach($enrollments as $enrollment)
 			{
@@ -198,23 +199,28 @@
 			}
 
 			$_SESSION['engagement-'.$index] = $data;
+			$_SESSION['courseNames'] = $courseNames;
 		}
 
 		else
 		{
 			$data = $_SESSION['engagement-'.$index];
+			$courseNames = $_SESSION['courseNames'];
 		}
 
 		if(isset($_POST['refresh']))
 		{
 			unset($_SESSION['engagement-'.$index]);
+			unset($_SESSION['courseNames']);
 			unset($_POST['refresh']);
 			
 			$f3->reroute('/reports/engagement/'.$index);
 		}
 
 		$f3->set('data', $data);
-
+		$f3->set('courseName', $courseNames[$index]);
+		$f3->set('courseNameList', $courseNames);
+		
 		echo Template::instance()->render('view/engagement.html');
 	});
 

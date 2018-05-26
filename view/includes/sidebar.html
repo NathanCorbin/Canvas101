@@ -15,3 +15,18 @@
     <li><a class="waves-effect" href="{{ @BASE }}/logout"><i class="material-icons">input</i>Logout</a></li>
 </ul>
 <a href="#" data-target="slide-out" class="sidenav-trigger" id="toggle"><i class="medium material-icons">menu</i></a>
+
+<div class="col s4 right">
+    <button class="btn waves-effect waves-light" name="refreshApi" id="refreshApi" type="button"><i class="material-icons left">refresh</i>Refresh</button>
+</div>
+
+<div class="col s4 right">
+    <a class="dropdown-trigger btn" href="" data-target="courseDropDown">Course List</a>
+    <ul id="courseDropDown" class="dropdown-content">
+        <div id="courses">
+            <repeat group="{{ @courseNameList }}" value="{{ @course }}">
+                <li><i class="dropdown-item course">{{ @course }}</i></li>
+            </repeat>
+        </div>
+    </ul>
+</div>
