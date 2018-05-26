@@ -10,36 +10,42 @@
 	// require the autoload file
 	require_once('vendor/autoload.php');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+	// create an instance of the Base class
+	$f3 = Base::instance();
 
-// require the autoload file
-require_once('vendor/autoload.php');
+	$f3->route('GET /', function($f3){
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
 
-// create an instance of the Base class
-$f3 = Base::instance();
+		$f3->reroute('/reports/grades/0');
+	});
 
-$f3->route('GET /', function($f3){
-    if(!isset($_SESSION['user']))
-        $f3->reroute('/login');
+	// report routes. Takes a parameter to determine what time of report to display
+	$f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
+		include("model/apiRequests.php");
 
-    $f3->reroute('/reports/grades/0');
-});
-
-// report routes. Takes a parameter to determine what time of report to display
-$f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
-    include("model/apiRequests.php");
-
-    if(!isset($_SESSION['user']))
-        $f3->reroute('/login');
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
 
 
-    //new UserDB();
-    $user = unserialize($_SESSION['user']);
+		//new UserDB();
+		$user = unserialize($_SESSION['user']);
 
-    $courseIds = array();
-    $courseNames = array();
+		$courseIds = array();
+		$courseNames = array();
+		
+		$json = array();
+		$data = array();
+
+		// get the index from the url
+		$index = $params['id'];
+
+		// check if gradeJSON session exists for particular index
+		// if it doesn't, call the api and parse the data
+		// and set the json to the session
+		if(!isset($_SESSION['gradeJSON-'.$index]))
+		{
+			$key = $user->getAccessKey();
 
 			// get all the courses
 			$courses = getCourses($key);
@@ -91,18 +97,14 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
 
-    // get the index from the url
-    $index = $params['id'];
+		echo Template::instance()->render('view/grades.html');
+	});
 
-    // check if gradeJSON session exists for particular index
-    // if it doesn't, call the api and parse the data
-    // and set the json to the session
-    if(!isset($_SESSION['gradeJSON-'.$index]))
-    {
-        $key = $user->getAccessKey();
+	// assignment report route
+	$f3->route('GET|POST /reports/assignments', function($f3){
 
-        // get all the courses
-        $courses = getCourses($key);
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
 
 		include("model/apiRequests.php");
 		$user = unserialize($_SESSION['user']);
@@ -134,32 +136,20 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
 
 		$f3->set('data', $data);
 
-            // make sure the enrollment role is not a teacher
-            if($enrollment->role != 'TeacherEnrollment')
-            {
-                $json = array("id" => $enrollment->user_id,
-                    "name" => $enrollment->user->name,
-                    "grade" => $enrollment->grades->final_score);
+		echo Template::instance()->render('view/assignments.html');
+	});
 
-                array_push($data, $json);
-            }
-        }
+	$f3->route('GET|POST /reports/engagement/@id', function($f3, $params){
+		
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
 
-        $_SESSION['courseNames'] = $courseNames;
-        $_SESSION['gradeJSON-'.$index] = $data;
-    }
+		include("model/apiRequests.php");
 
-    // session json already exisits, so use it
-    else {
-        $courseNames = $_SESSION['courseNames'];
-        $data = $_SESSION['gradeJSON-'.$index];
-    }
+		$user = unserialize($_SESSION['user']);
+		$key = $user->getAccessKey();
 
-    if(isset($_POST['refresh']))
-    {
-        unset($_SESSION['courseNames']);
-        unset($_SESSION['gradeJSON-'.$index]);
-        unset($_POST['refresh']);
+		$index = $params['id'];
 
 		if(!isset($_SESSION['engagement-'.$index]))
 		{
@@ -189,15 +179,24 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
 					// calculate the date difference between now and when they last logged in
 					$daysElapsed = date_diff($currentDate, $dateLoggedIn);
 
-    $f3->set('data', $data);
-    $f3->set('courseName', $courseNames[$index]);
-    $f3->set('courseNameList', $courseNames);
+					// get the time in which they logged in and format 
+					// it in a way that is easily readable
+					$time = $enrollment->last_activity_at;
+					$time = date('h:i a', strtotime($time));
 
-    echo Template::instance()->render('view/grades.html');
-});
+					// get remaining information from json
+					$json = array('id' => $enrollment->user_id,
+								  'name' => $enrollment->user->name,
+								  'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
+								  'time' => $time,
+								  'daysElapsed' => $daysElapsed->d,
+								  'activityTime' => floor($enrollment->total_activity_time / 60),
+								  'email' => $enrollment->user->login_id);
 
-// assignment report route
-$f3->route('GET|POST /reports/assignments', function($f3){
+					// add json data to array
+					array_push($data, $json);
+				}
+			}
 
 			$_SESSION['engagement-'.$index] = $data;
 			$_SESSION['courseNames'] = $courseNames;
@@ -225,146 +224,40 @@ $f3->route('GET|POST /reports/assignments', function($f3){
 		echo Template::instance()->render('view/engagement.html');
 	});
 
-    foreach($courses as $course)
-    {
-        array_push($courseIds, $course->id);
-        //array_push($courseNames, $course->name);
-    }
 
-    $assignments = getAssignments($key, $courseIds[1], 14407802);
+	$f3->route('GET|POST /login', function($f3){
 
-    foreach($assignments as $assignment)
-    {
-        $json = array('title' => $assignment->title,
-            'points' => $assignment->points_possible,
-            'due_date' => $assignment->due_at,
-            'status' => $assignment->has_submitted_submissions);
+		if(isset($_POST['submit'])) {
+			$errors = array();
 
-        array_push($data, $json);
-    }
+			$username = $_POST['username'];
+			$password = $_POST['password'];
 
-    $f3->set('data', $data);
+			new UserDB();
 
-    echo Template::instance()->render('view/assignments.html');
-});
+			if(!UserDB::login($username, $password))
+				$errors["invalid-login"] = 'Username or password is incorrect';
 
-$f3->route('GET|POST /reports/engagement/@id', function($f3, $params){
+			$f3->set('username', $_POST['username']);
+			$f3->set('errors', $errors);
 
-    if(!isset($_SESSION['user']))
-        $f3->reroute('/login');
+			// no errors, create a user object and it to session
+			if(empty($errors)) {
+				$_SESSION['user'] = serialize(new User($username, $password));
 
-    include("model/apiRequests.php");
+				$f3->reroute('/');
+			}
+		}
 
-    $user = unserialize($_SESSION['user']);
-    $key = $user->getAccessKey();
+		echo Template::instance()->render('view/login.html');
+	});
 
 	$f3->route('GET|POST /logout', function($f3){
 		if(isset($_SESSION['user']))
 			unset($_SESSION['user']);
 
-    if(!isset($_SESSION['engagement-'.$index]))
-    {
-        $courses = getCourses($key);
+		$f3->reroute('/login');
+	});
 
-        $json = array();
-        $data = array();
-        $courseIds = array();
-        $courseNames = array();
-
-        foreach($courses as $course)
-        {
-            array_push($courseIds, $course->id);
-            array_push($courseNames, $course->name);
-        }
-
-        $enrollments = getEnrollments($key, $courseIds[$index]);
-        date_default_timezone_set('America/Los_Angeles');
-
-        foreach($enrollments as $enrollment)
-        {
-            if($enrollment->role != 'TeacherEnrollment')
-            {
-                // get the current date, and the last login date
-                $currentDate = new DateTime(date('Y-m-d'));
-                $dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
-
-                // calculate the date difference between now and when they last logged in
-                $daysElapsed = date_diff($currentDate, $dateLoggedIn);
-
-                // get the time in which they logged in and format
-                // it in a way that is easily readable
-                $time = $enrollment->last_activity_at;
-                $time = date('h:i a', strtotime($time));
-
-                // get remaining information from json
-                $json = array('id' => $enrollment->user_id,
-                    'name' => $enrollment->user->name,
-                    'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
-                    'time' => $time,
-                    'daysElapsed' => $daysElapsed->d,
-                    'activityTime' => floor($enrollment->total_activity_time / 60),
-                    'email' => $enrollment->user->login_id);
-
-                // add json data to array
-                array_push($data, $json);
-            }
-        }
-
-        $_SESSION['engagement-'.$index] = $data;
-    }
-
-    else
-    {
-        $data = $_SESSION['engagement-'.$index];
-    }
-
-    if(isset($_POST['refresh']))
-    {
-        unset($_SESSION['engagement-'.$index]);
-        unset($_POST['refresh']);
-
-        $f3->reroute('/reports/engagement/'.$index);
-    }
-
-    $f3->set('data', $data);
-
-    echo Template::instance()->render('view/engagement.html');
-});
-
-
-$f3->route('GET|POST /login', function($f3){
-
-    if(isset($_POST['submit'])) {
-        $errors = array();
-
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        new UserDB();
-
-        if(!UserDB::login($username, $password))
-            $errors["invalid-login"] = 'Username or password is incorrect';
-
-        $f3->set('username', $_POST['username']);
-        $f3->set('errors', $errors);
-
-        // no errors, create a user object and it to session
-        if(empty($errors)) {
-            $_SESSION['user'] = serialize(new User($username, $password));
-
-            $f3->reroute('/');
-        }
-    }
-
-    echo Template::instance()->render('view/login.html');
-});
-
-$f3->route('GET|POST /logout', function($f3){
-    if(isset($_SESSION['user']))
-        unset($_SESSION['user']);
-
-    $f3->reroute('/login');
-});
-
-// run fat-free
-$f3->run();
+	// run fat-free
+	$f3->run();
