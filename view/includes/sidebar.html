@@ -1,30 +1,32 @@
-<nav id="sidebar">
-    <div class="sidebar-header">
-        <h3>Reporting Tool</h3>
-    </div>
 
-    <ul class="list-unstyled components">
-        
-        <li {{ @page == "grades" ? "class=\"active\"" : ""}}>
-            <a href="{{ @BASE }}/reports/grades/0">Course Grades</a>
-        </li>
-        <li {{ @page == "assignments" ? "class=\"active\"" : ""}}>
-            <a href="{{ @BASE }}/reports/assignments">Assignment Report</a>
-        </li>
-        <li {{ @page == "engagement" ? "class=\"active\"" : ""}}>
-            <a href="{{ @BASE }}/reports/engagement/0">Engagement Report</a>
-        </li>
+<ul id="slide-out" class="sidenav sidenav-fixed" style="background-color: #fefefe">
+    <li></li>
+        <div class="user-view" style="width:300px;height:176px">
+            <div class="background">
+                <img src="{{ @BASE }}/view/includes/images/canvas-green-river-logo1.png" style="width:300px; height:176px;">
+            </div>
+        </div>
+    </li>
+    <li><a class="waves-effect" href="{{ @BASE }}/reports/grades/0"><i class="material-icons">assessment</i>Grade Report</a></li>
+    <li><a class="waves-effect" href="{{ @BASE }}/reports/assignments"><i class="material-icons">assignment</i>Assignment Report</a></li>
+    <li><a class="waves-effect" href="{{ @BASE }}/reports/engagement/0"><i class="material-icons">assignment_late</i>Engagement Report</a></li>
+    <li><div class="divider"></div></li>
+    
+    <li><a class="waves-effect" href="{{ @BASE }}/logout"><i class="material-icons">input</i>Logout</a></li>
+</ul>
+<a href="#" data-target="slide-out" class="sidenav-trigger" id="toggle"><i class="medium material-icons">menu</i></a>
+
+<div class="col s4 right">
+    <button class="btn waves-effect waves-light" name="refreshApi" id="refreshApi" type="button"><i class="material-icons left">refresh</i>Refresh</button>
+</div>
+
+<div class="col s4 right">
+    <a class="dropdown-trigger btn" href="" data-target="courseDropDown">Course List</a>
+    <ul id="courseDropDown" class="dropdown-content">
+        <div id="courses">
+            <repeat group="{{ @courseNameList }}" value="{{ @course }}">
+                <li><i class="dropdown-item course">{{ @course }}</i></li>
+            </repeat>
+        </div>
     </ul>
-
-    <ul class="list-unstyled">
-        <li><a href="{{ @BASE }}/logout">Logout</a></li>
-    </ul>
-</nav>
-
-<nav class="navbar navbar-default" id="toggle-button">
-    <div class="navbar-header">
-        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-            <i class="fa fa-align-justify"></i>
-        </button>
-    </div>
-</nav>
+</div>

@@ -1,6 +1,12 @@
 $(document).ready(function() {
     var table = $('#engagementTable').DataTable({
-        "bUseRendered": true
+        columnDefs: 
+        [{ 
+            type: 'natural', targets: [0, 1, 2, 3, 4],
+            className: 'mdl-data-table__cell--non-numeric'
+        }],
+        aaSorting: [[3, 'desc']],
+        bLengthChange: false
     });
 
     $('#engagementTable tbody').on( 'click', 'tr', '.clickable', function () {
@@ -13,7 +19,7 @@ $(document).ready(function() {
         var lastLogin = data[2];
         var timeElapsed = data[3];
         
-        alert(id + ' ' + name + ' ' + lastLogin + ' ' + timeElapsed);
+        //alert(id + ' ' + name + ' ' + lastLogin + ' ' + timeElapsed);
     	$('#showModal').click();
     });
 });

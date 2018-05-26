@@ -1,5 +1,14 @@
-<?php
-session_start();
+<?php 
+	session_start();
+
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+
+	date_default_timezone_set('America/Los_Angeles');
+
+	// require the autoload file
+	require_once('vendor/autoload.php');
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -32,8 +41,55 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
     $courseIds = array();
     $courseNames = array();
 
-    $json = array();
-    $data = array();
+			// get all the courses
+			$courses = getCourses($key);
+
+			// for every course, get the id and the name
+			foreach($courses as $course)
+			{
+				array_push($courseIds, $course->id);
+				array_push($courseNames, $course->name);
+			}
+
+			$enrollments = getEnrollments($key, $courseIds[$index]);
+
+			// for every enrollment, get the userid, name, and grade
+			foreach($enrollments as $enrollment)
+			{
+
+				// make sure the enrollment role is not a teacher
+				if($enrollment->role != 'TeacherEnrollment')
+				{	
+					$json = array("id" => $enrollment->user_id, 
+								  "name" => $enrollment->user->name, 
+								  "grade" => $enrollment->grades->final_score);
+
+					array_push($data, $json);
+				}
+			}
+
+			$_SESSION['courseNames'] = $courseNames;
+			$_SESSION['gradeJSON-'.$index] = $data;
+		}
+		
+		// session json already exisits, so use it
+		else {
+			$courseNames = $_SESSION['courseNames'];
+			$data = $_SESSION['gradeJSON-'.$index];
+		}
+
+		if(isset($_POST['refresh']))
+		{
+			unset($_SESSION['courseNames']);
+			unset($_SESSION['gradeJSON-'.$index]);
+			unset($_POST['refresh']);
+			
+			$f3->reroute('/reports/grades/'.$index);
+		}
+
+		$f3->set('data', $data);
+		$f3->set('courseName', $courseNames[$index]);
+		$f3->set('courseNameList', $courseNames);
 
     // get the index from the url
     $index = $params['id'];
@@ -48,18 +104,35 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
         // get all the courses
         $courses = getCourses($key);
 
-        // for every course, get the id and the name
-        foreach($courses as $course)
-        {
-            array_push($courseIds, $course->id);
-            array_push($courseNames, $course->name);
-        }
+		include("model/apiRequests.php");
+		$user = unserialize($_SESSION['user']);
+		$key = $user->getAccessKey();
 
-        $enrollments = getEnrollments($key, $courseIds[$index]);
+		$json = array();
+		$data = array();
+		$courseIds = array();
+		
+		$courses = getCourses($key);
 
-        // for every enrollment, get the userid, name, and grade
-        foreach($enrollments as $enrollment)
-        {
+		foreach($courses as $course)
+		{
+			array_push($courseIds, $course->id);
+			//array_push($courseNames, $course->name);
+		}
+
+		$assignments = getAssignments($key, $courseIds[0], 14407802);
+
+		foreach($assignments as $assignment)
+		{
+			$json = array('title' => $assignment->title,
+						  'points' => $assignment->points_possible,
+						  'due_date' => $assignment->due_at,
+						  'status' => $assignment->has_submitted_submissions);
+						  
+			array_push($data, $json);
+		}
+
+		$f3->set('data', $data);
 
             // make sure the enrollment role is not a teacher
             if($enrollment->role != 'TeacherEnrollment')
@@ -88,8 +161,33 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
         unset($_SESSION['gradeJSON-'.$index]);
         unset($_POST['refresh']);
 
-        $f3->reroute('/reports/grades/'.$index);
-    }
+		if(!isset($_SESSION['engagement-'.$index]))
+		{
+			$courses = getCourses($key);
+
+			$json = array();
+			$data = array();
+			$courseIds = array();
+			$courseNames = array();
+
+			foreach($courses as $course)
+			{
+				array_push($courseIds, $course->id);
+				array_push($courseNames, $course->name);
+			}
+
+			$enrollments = getEnrollments($key, $courseIds[$index]);
+			
+			foreach($enrollments as $enrollment)
+			{
+				if($enrollment->role != 'TeacherEnrollment')
+				{
+					// get the current date, and the last login date
+					$currentDate = new DateTime(date('Y-m-d'));
+					$dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
+					
+					// calculate the date difference between now and when they last logged in
+					$daysElapsed = date_diff($currentDate, $dateLoggedIn);
 
     $f3->set('data', $data);
     $f3->set('courseName', $courseNames[$index]);
@@ -101,18 +199,31 @@ $f3->route('GET|POST /reports/grades/@id', function($f3, $params) {
 // assignment report route
 $f3->route('GET|POST /reports/assignments', function($f3){
 
-    if(!isset($_SESSION['user']))
-        $f3->reroute('/login');
+			$_SESSION['engagement-'.$index] = $data;
+			$_SESSION['courseNames'] = $courseNames;
+		}
 
-    include("model/apiRequests.php");
-    $user = unserialize($_SESSION['user']);
-    $key = $user->getAccessKey();
+		else
+		{
+			$data = $_SESSION['engagement-'.$index];
+			$courseNames = $_SESSION['courseNames'];
+		}
 
-    $json = array();
-    $data = array();
-    $courseIds = array();
+		if(isset($_POST['refresh']))
+		{
+			unset($_SESSION['engagement-'.$index]);
+			unset($_SESSION['courseNames']);
+			unset($_POST['refresh']);
+			
+			$f3->reroute('/reports/engagement/'.$index);
+		}
 
-    $courses = getCourses($key);
+		$f3->set('data', $data);
+		$f3->set('courseName', $courseNames[$index]);
+		$f3->set('courseNameList', $courseNames);
+		
+		echo Template::instance()->render('view/engagement.html');
+	});
 
     foreach($courses as $course)
     {
@@ -147,7 +258,9 @@ $f3->route('GET|POST /reports/engagement/@id', function($f3, $params){
     $user = unserialize($_SESSION['user']);
     $key = $user->getAccessKey();
 
-    $index = $params['id'];
+	$f3->route('GET|POST /logout', function($f3){
+		if(isset($_SESSION['user']))
+			unset($_SESSION['user']);
 
     if(!isset($_SESSION['engagement-'.$index]))
     {
