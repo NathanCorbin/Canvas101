@@ -2,7 +2,8 @@ $(document).ready(function() {
     var table = $('#engagementTable').DataTable({
         columnDefs: 
         [{ 
-            type: 'natural', targets: [0, 1, 2, 3, 4],
+            type: 'natural', 
+            targets: [0, 1, 2, 3, 4],
             className: 'mdl-data-table__cell--non-numeric'
         }],
         aaSorting: [[3, 'desc']],
@@ -21,5 +22,16 @@ $(document).ready(function() {
         
         //alert(id + ' ' + name + ' ' + lastLogin + ' ' + timeElapsed);
     	$('#showModal').click();
+    });
+});
+
+$(document).ready(function() {
+    $('#assignmentTable').DataTable({
+        columnDefs: 
+        [{ 
+            targets: [0, 1, 2, 3],
+            className: 'mdl-data-table__cell--non-numeric',
+        }],
+        
     });
 });

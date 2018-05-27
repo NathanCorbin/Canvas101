@@ -1,7 +1,7 @@
 <?php
 
-//require_once('/home/ncorbing/db.php');
-require_once('/home/siqbalgr/database.php');
+require_once('/home/ncorbing/db.php');
+//require_once('/home/siqbalgr/database.php');
 
 /**
  * Class for the user database

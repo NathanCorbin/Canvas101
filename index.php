@@ -5,8 +5,6 @@
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
 
-	date_default_timezone_set('America/Los_Angeles');
-
 	// require the autoload file
 	require_once('vendor/autoload.php');
 
@@ -62,16 +60,12 @@
 			// for every enrollment, get the userid, name, and grade
 			foreach($enrollments as $enrollment)
 			{
+                $json = array("id" => $enrollment->user_id, 
+                                "name" => $enrollment->user->name, 
+                                "grade" => $enrollment->grades->final_score);
 
-				// make sure the enrollment role is not a teacher
-				if($enrollment->role != 'TeacherEnrollment')
-				{	
-					$json = array("id" => $enrollment->user_id, 
-								  "name" => $enrollment->user->name, 
-								  "grade" => $enrollment->grades->final_score);
-
-					array_push($data, $json);
-				}
+                array_push($data, $json);
+				
 			}
 
 			$_SESSION['courseNames'] = $courseNames;
@@ -101,40 +95,78 @@
 	});
 
 	// assignment report route
-	$f3->route('GET|POST /reports/assignments', function($f3){
+	$f3->route('GET|POST /reports/assignments/@id', function($f3, $param){
+        
+        if(!isset($_SESSION['user']))
+            $f3->reroute('/login');
+            
+        include("model/apiRequests.php");
 
-		if(!isset($_SESSION['user']))
-			$f3->reroute('/login');
+        $user = unserialize($_SESSION['user']);
+        $key = $user->getAccessKey();
 
-		include("model/apiRequests.php");
-		$user = unserialize($_SESSION['user']);
-		$key = $user->getAccessKey();
+        $index = $param['id'];
 
-		$json = array();
-		$data = array();
-		$courseIds = array();
-		
-		$courses = getCourses($key);
+        // check if json data already exist, if not, go through
+        // the process of getting the data from the api
+        if(!isset($_SESSION["assignmentReport-$index"]))
+        {
+            $courses = getCourses($key);
 
-		foreach($courses as $course)
+            $json = array();
+            $data = array();
+
+            $courseIds = array();
+            $courseNames = array();
+
+            // get the course id and course name for each course
+            foreach($courses as $course)
+            {
+                array_push($courseIds, $course->id);
+                array_push($courseNames, $course->name);
+            }
+            
+            // get all the assignments for the current course
+            $assignments = getAssignments($key, $courseIds[$index]);
+            
+            foreach($assignments as $assignment)
+            {   
+                // get the assignment stats for the current student
+                if(!empty($assignment))
+                {
+					$json = array('missing' => $assignment->tardiness_breakdown->missing,
+								  'on_time' => $assignment->tardiness_breakdown->on_time,
+								  'floating' => $assignment->tardiness_breakdown->floating,
+                                  'name' => getStudentName($key, $assignment->id));
+                }
+
+                array_push($data, $json);
+            }
+
+            // add the json data to the session
+            $_SESSION["assignmentReport-$index"] = $data;
+            $_SESSION['courseNames'] = $courseNames;
+        }
+        // otherwide just get the json data from the session
+        else
+        {
+            $data = $_SESSION["assignmentReport-$index"];
+            $courseNames = $_SESSION['courseNames'];
+        }
+
+        // check if the refresh button is pressed, if so, delete
+        // the session variables for this json and refresh the page
+        if(isset($_POST['refresh']))
 		{
-			array_push($courseIds, $course->id);
-			//array_push($courseNames, $course->name);
+			unset($_SESSION['courseNames']);
+			unset($_SESSION["assignmentReport-$index"]);
+			unset($_POST['refresh']);
+			
+			$f3->reroute('/reports/assignments/'.$index);
 		}
 
-		$assignments = getAssignments($key, $courseIds[0], 14407802);
-
-		foreach($assignments as $assignment)
-		{
-			$json = array('title' => $assignment->title,
-						  'points' => $assignment->points_possible,
-						  'due_date' => $assignment->due_at,
-						  'status' => $assignment->has_submitted_submissions);
-						  
-			array_push($data, $json);
-		}
-
-		$f3->set('data', $data);
+        $f3->set('data', $data);
+        $f3->set('courseNameList', $courseNames);
 
 		echo Template::instance()->render('view/assignments.html');
 	});
@@ -170,32 +202,31 @@
 			
 			foreach($enrollments as $enrollment)
 			{
-				if($enrollment->role != 'TeacherEnrollment')
-				{
-					// get the current date, and the last login date
-					$currentDate = new DateTime(date('Y-m-d'));
-					$dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
-					
-					// calculate the date difference between now and when they last logged in
-					$daysElapsed = date_diff($currentDate, $dateLoggedIn);
+				date_default_timezone_set('America/Los_Angeles');
+                // get the current date, and the last login date
+                $currentDate = new DateTime(date('Y-m-d'));
+                $dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
+                
+                // calculate the date difference between now and when they last logged in
+                $daysElapsed = date_diff($currentDate, $dateLoggedIn);
 
-					// get the time in which they logged in and format 
-					// it in a way that is easily readable
-					$time = $enrollment->last_activity_at;
-					$time = date('h:i a', strtotime($time));
+                // get the time in which they logged in and format 
+                // it in a way that is easily readable
+                $time = $enrollment->last_activity_at;
+                $time = date('h:i a', strtotime($time));
 
-					// get remaining information from json
-					$json = array('id' => $enrollment->user_id,
-								  'name' => $enrollment->user->name,
-								  'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
-								  'time' => $time,
-								  'daysElapsed' => $daysElapsed->d,
-								  'activityTime' => floor($enrollment->total_activity_time / 60),
-								  'email' => $enrollment->user->login_id);
+                // get remaining information from json
+                $json = array('id' => $enrollment->user_id,
+                                'name' => $enrollment->user->name,
+                                'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
+                                'time' => $time,
+                                'daysElapsed' => $daysElapsed->d,
+                                'activityTime' => floor($enrollment->total_activity_time / 60),
+                                'email' => $enrollment->user->login_id);
 
-					// add json data to array
-					array_push($data, $json);
-				}
+                // add json data to array
+                array_push($data, $json);
+				
 			}
 
 			$_SESSION['engagement-'.$index] = $data;
