@@ -41,8 +41,6 @@
 		return $json;
 	}
 
-
-
 	function getAssignments($access_key, $courseId)
 	{     	
      	$url = "https://canvas.instructure.com/api/v1/courses/$courseId/analytics/student_summaries?access_token=$access_key&per_page=100";

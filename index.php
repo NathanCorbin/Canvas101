@@ -177,11 +177,33 @@
 			$f3->reroute('/login');
 
 		include("model/apiRequests.php");
+		include("model/arrays.php");
+		include("model/email-script.php");
 
 		$user = unserialize($_SESSION['user']);
 		$key = $user->getAccessKey();
 
 		$index = $params['id'];
+
+		if(isset($_POST['submit']))
+		{
+			$errors = array();
+			$email = $emailMessage = "";
+
+			
+			if(!validEmail($_POST['email']))
+				$errors['email'] = 'Invalid email format!';
+			
+			if(!validMessage($_POST['message']))
+				$errors['message'] = 'Message should not be empty and be less than 300 characters!';
+			
+			if(empty($errors))
+			{
+				email($_POST['email'], $_POST['message']);
+
+				echo "000000000000000000000000000000000000000000000000000000000000";
+			}
+		}
 
 		if(!isset($_SESSION['engagement-'.$index]))
 		{
@@ -189,6 +211,7 @@
 
 			$json = array();
 			$data = array();
+			$assignmentData = array();
 			$courseIds = array();
 			$courseNames = array();
 
@@ -199,6 +222,19 @@
 			}
 
 			$enrollments = getEnrollments($key, $courseIds[$index]);
+			$students = getAssignments($key, $courseIds[$index]);
+            
+            foreach($students as $student)
+            {   
+                // get the assignment stats for the current student
+                if(!empty($student))
+                {
+					$json = array('missing' => $student->tardiness_breakdown->missing,
+								  'id' => $student->id);	
+                }
+
+                array_push($assignmentData, $json);
+            }
 			
 			foreach($enrollments as $enrollment)
 			{
@@ -222,12 +258,13 @@
                                 'time' => $time,
                                 'daysElapsed' => $daysElapsed->d,
                                 'activityTime' => floor($enrollment->total_activity_time / 60),
-                                'email' => $enrollment->user->login_id);
+								'email' => $enrollment->user->login_id);
 
                 // add json data to array
-                array_push($data, $json);
-				
+				array_push($data, $json);
 			}
+
+			$data = merge_two_arrays($data, $assignmentData, "id");
 
 			$_SESSION['engagement-'.$index] = $data;
 			$_SESSION['courseNames'] = $courseNames;
@@ -244,10 +281,11 @@
 			unset($_SESSION['engagement-'.$index]);
 			unset($_SESSION['courseNames']);
 			unset($_POST['refresh']);
-			
 			$f3->reroute('/reports/engagement/'.$index);
 		}
 
+		
+		
 		$f3->set('data', $data);
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);

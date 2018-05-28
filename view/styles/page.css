@@ -1,8 +1,4 @@
 
-.material-icons {
-    margin: 0 15px 0 0 !important;
-}
-
 .container {
     padding-left: 300px;
     max-width: 1580px !important;
@@ -31,6 +27,36 @@
     display: none;
 }
 
+#refreshApi {
+    position: fixed;
+    right:    0;
+    bottom:   0;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+#courseList {
+    right: 0;
+    top: 0;
+    position: fixed;
+}
+
+#send-btn {
+    margin-bottom: 2em;
+}
+
+.modal {
+    width: 35% !important;
+}
+
+.modal-container {
+    margin: 0 auto;
+    width: 70%;
+}
+
+.modal-header {
+    padding-bottom: 2em;
+}
 
 /*
 .sidenav {

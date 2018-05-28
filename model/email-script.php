@@ -7,9 +7,23 @@
  */
 
 
-    $email=$_POST['email'];
-    $subject = 'Your subject for email';
-    $message = 'Body of your message';
 
-    mail($email, $subject, $message);
-?>
+    function email($email, $message)
+    {
+        $subject = "test";
+
+        $headers = 'From: webmaster@example.com' . "\r\n" .
+                    'Reply-To: webmaster@example.com' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
+        mail($email, $subject, $message, $headers);
+    }
+
+
+    function validEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    function validMessage($message) {
+        return strlen($message) > 0 && strlen($message) < 300;
+    }

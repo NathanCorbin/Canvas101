@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ @row['name'] }}</td>
                         <td>{{ @row['on_time'] }}</td>
-                        <td>{{ @row['floating'] }}</td>
+                        <td class="clickable">{{ @row['floating'] }}</td>
                         <td class="missing"><p>{{ @row['missing'] }}</p></td>
                     </tr>
                 </repeat>
@@ -29,6 +29,10 @@
         </table>
     </div>
 
+    <include href="/view/includes/modal.html"></include>
+
+    <button class="modal-trigger" href="#emailModal" id="showModal"></button>
+    
     <include href="/view/includes/javascripts.html">
 </body>
 </html>
