@@ -6,37 +6,49 @@
  * Time: 2:17 PM
  */
 
+//require_once('/home/ncorbing/db.php');
+require_once('/home/siqbalgr/database.php');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-//    function email($email, $message)
-//    {
-//        $subject = "test";
-//
-//        $headers = 'From: webmaster@example.com' . "\r\n" .
-//                    'Reply-To: webmaster@example.com' . "\r\n" .
-//                    'X-Mailer: PHP/' . phpversion();
-//
-//        mail($email, $subject, $message, $headers);
-//    }
-//
-//
-//    function validEmail($email) {
-//        return filter_var($email, FILTER_VALIDATE_EMAIL);
-//    }
-//
-//    function validMessage($message) {
-//        return strlen($message) > 0 && strlen($message) < 300;
-//    }
+function email($email, $message, $subject)
+{
+    new UserDB();
+    $mail = new PHPMailer(true);
 
-require 'PHPMailerAutoload.php';
-$mail = new PHPMailer;
-$mail->setFrom('shabossis@hotmail.com', 'Shahbaz');
-$mail->addAddress('ncorbin94@live.com', 'Mr. Nathan');
-$mail->Subject  = 'We are Canvas 101';
-$mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';
-if(!$mail->send()) {
-    echo 'Message was not sent.';
-    echo 'Mailer error: ' . $mail->ErrorInfo;
-} else {
-    echo 'Message has been sent.';
+    try {
+
+        $mail->SMTPDebug = 2;
+        $mail->isSMTP();
+        $mail->Host = UserDB::getEmailHost();
+        $mail->SMTPAuth = true;
+        $mail->Username = UserDB::getEmailAddress();
+        $mail->Password = UserDB::getEmailPassword();
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        //Recipients
+        $mail->setFrom(UserDB::getEmailAddress(), 'Green River');
+        $mail->addAddress($email);
+        $mail->addReplyTo(UserDB::getEmailAddress());
+
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $message;
+        $mail->AltBody = $message;
+
+        $mail->send();
+
+    } catch (Exception $e) {
+        echo '<p>Message could not be sent. Mailer Error: ', $mail->ErrorInfo."</p>";
+    }
+}
+
+function validEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function validMessage($message) {
+    return strlen($message) > 0 && strlen($message) < 300;
 }
