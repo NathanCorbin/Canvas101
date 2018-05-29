@@ -8,7 +8,9 @@
 	],
 	"require":{
 		"bcosca/fatfree-core":"dev-master",
-		"php-curl-class/php-curl-class": "^8.0"
+		"php-curl-class/php-curl-class": "^8.0",
+		"phpmailer/phpmailer": "^6.0",
+		"league/oauth2-google": "^2.2"
 	},
 	"autoload": {
 		"classmap": ["model/classes/"]

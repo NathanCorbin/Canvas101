@@ -85,4 +85,61 @@ class UserDB
 
 		return $result['password'] == sha1($password);
 	}
+
+	/**
+	 * Returns the server's internal email address
+	 * 
+	 * @return string the email of the server
+	 */
+	public static function getEmailAddress()
+	{
+		global $dbh;
+
+		$query = "SELECT email FROM admin";
+
+		$statement = $dbh->prepare($query);
+		$statement->execute();
+
+		$result = $statement->fetch();
+
+		return $statement->fetchObject()->email;
+	}
+
+	/**
+	 * Returns the server's email host name
+	 * 
+	 * @return string the server's email host
+	 */
+	public static function getEmailHost()
+	{
+		global $dbh;
+
+		$query = "SELECT `host` FROM `admin`";
+
+		$statement = $dbh->prepare($query);
+		$statement->execute();
+
+		$result = $statement->fetch();
+
+		return $statement->fetchObject()->host;
+	}
+
+	/**
+	 * Returns the server's email password
+	 * 
+	 * @return string the password for the server email
+	 */
+	public static function getEmailPassword()
+	{
+		global $dbh;
+
+		$query = "SELECT `password` FROM `admin`";
+
+		$statement = $dbh->prepare($query);
+		$statement->execute();
+
+		$result = $statement->fetch();
+
+		return $statement->fetchObject()->password;
+	}
 }

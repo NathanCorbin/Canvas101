@@ -1,4 +1,3 @@
-
 .container {
     padding-left: 300px;
     max-width: 1580px !important;
@@ -18,9 +17,14 @@
     }
 }
 
+.sidenav {
+    background:#394B58;
+}
+
 #courseList {
     margin-right: 2em;
     position: relative;
+    z-index: 9999;
 }
 
 #showModal {
@@ -33,6 +37,7 @@
     bottom:   0;
     margin-right: 30px;
     margin-bottom: 30px;
+    z-index: 9999;
 }
 
 #courseList {

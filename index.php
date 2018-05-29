@@ -11,7 +11,8 @@
 	// create an instance of the Base class
 	$f3 = Base::instance();
 
-	$f3->route('GET /', function($f3){
+	 // the main route. Automatically reroutes to the grade report
+	$f3->route('GET /', function($f3) {
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
 
@@ -24,7 +25,6 @@
 
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
-
 
 		//new UserDB();
 		$user = unserialize($_SESSION['user']);
@@ -41,16 +41,14 @@
 		// check if gradeJSON session exists for particular index
 		// if it doesn't, call the api and parse the data
 		// and set the json to the session
-		if(!isset($_SESSION['gradeJSON-'.$index]))
-		{
+		if(!isset($_SESSION['gradeJSON-'.$index])) {
 			$key = $user->getAccessKey();
 
 			// get all the courses
 			$courses = getCourses($key);
 
 			// for every course, get the id and the name
-			foreach($courses as $course)
-			{
+			foreach($courses as $course) {
 				array_push($courseIds, $course->id);
 				array_push($courseNames, $course->name);
 			}
@@ -58,8 +56,7 @@
 			$enrollments = getEnrollments($key, $courseIds[$index]);
 
 			// for every enrollment, get the userid, name, and grade
-			foreach($enrollments as $enrollment)
-			{
+			foreach($enrollments as $enrollment) {
                 $json = array("id" => $enrollment->user_id, 
                                 "name" => $enrollment->user->name, 
                                 "grade" => $enrollment->grades->final_score);
@@ -78,8 +75,7 @@
 			$data = $_SESSION['gradeJSON-'.$index];
 		}
 
-		if(isset($_POST['refresh']))
-		{
+		if(isset($_POST['refresh'])) {
 			unset($_SESSION['courseNames']);
 			unset($_SESSION['gradeJSON-'.$index]);
 			unset($_POST['refresh']);
@@ -95,7 +91,7 @@
 	});
 
 	// assignment report route
-	$f3->route('GET|POST /reports/assignments/@id', function($f3, $param){
+	$f3->route('GET|POST /reports/assignments/@id', function($f3, $param) {
         
         if(!isset($_SESSION['user']))
             $f3->reroute('/login');
@@ -105,12 +101,11 @@
         $user = unserialize($_SESSION['user']);
         $key = $user->getAccessKey();
 
-        $index = $param['id'];
+		$index = $param['id'];
 
         // check if json data already exist, if not, go through
         // the process of getting the data from the api
-        if(!isset($_SESSION["assignmentReport-$index"]))
-        {
+        if(!isset($_SESSION["assignmentReport-$index"])) {
             $courses = getCourses($key);
 
             $json = array();
@@ -120,8 +115,7 @@
             $courseNames = array();
 
             // get the course id and course name for each course
-            foreach($courses as $course)
-            {
+            foreach($courses as $course) {
                 array_push($courseIds, $course->id);
                 array_push($courseNames, $course->name);
             }
@@ -129,11 +123,9 @@
             // get all the assignments for the current course
             $assignments = getAssignments($key, $courseIds[$index]);
             
-            foreach($assignments as $assignment)
-            {   
+            foreach($assignments as $assignment) {   
                 // get the assignment stats for the current student
-                if(!empty($assignment))
-                {
+                if(!empty($assignment)) {
 					$json = array('missing' => $assignment->tardiness_breakdown->missing,
 								  'on_time' => $assignment->tardiness_breakdown->on_time,
 								  'floating' => $assignment->tardiness_breakdown->floating,
@@ -148,16 +140,14 @@
             $_SESSION['courseNames'] = $courseNames;
         }
         // otherwide just get the json data from the session
-        else
-        {
+        else {
             $data = $_SESSION["assignmentReport-$index"];
             $courseNames = $_SESSION['courseNames'];
         }
 
         // check if the refresh button is pressed, if so, delete
         // the session variables for this json and refresh the page
-        if(isset($_POST['refresh']))
-		{
+        if(isset($_POST['refresh'])) {
 			unset($_SESSION['courseNames']);
 			unset($_SESSION["assignmentReport-$index"]);
 			unset($_POST['refresh']);
@@ -171,7 +161,8 @@
 		echo Template::instance()->render('view/assignments.html');
 	});
 
-	$f3->route('GET|POST /reports/engagement/@id', function($f3, $params){
+	// engagement report route
+	$f3->route('GET|POST /reports/engagement/@id', function($f3, $params) {
 		
 		if(!isset($_SESSION['user']))
 			$f3->reroute('/login');
@@ -185,28 +176,27 @@
 
 		$index = $params['id'];
 
-		if(isset($_POST['submit']))
-		{
+		// check if the user hit the submit button
+		if(isset($_POST['submit'])) {
 			$errors = array();
 			$email = $emailMessage = "";
 
-			
 			if(!validEmail($_POST['email']))
 				$errors['email'] = 'Invalid email format!';
 			
-			if(!validMessage($_POST['message']))
+			if(!validMessage($_POST['emailMessage']))
 				$errors['message'] = 'Message should not be empty and be less than 300 characters!';
 			
-			if(empty($errors))
-			{
-				email($_POST['email'], $_POST['message']);
-
-				echo "000000000000000000000000000000000000000000000000000000000000";
+			// send the email if there were no errors
+			if(empty($errors)) {	
+				email($_POST['email'], $_POST['emailMessage'], 'This is a subject');
+				$f3->reroute('/reports/engagement/'.$index);
 			}
 		}
 
-		if(!isset($_SESSION['engagement-'.$index]))
-		{
+		// check if the json file already exists in the server
+		// if it doesn't, create it 
+		if(!isset($_SESSION['engagement-'.$index])) {
 			$courses = getCourses($key);
 
 			$json = array();
@@ -215,8 +205,7 @@
 			$courseIds = array();
 			$courseNames = array();
 
-			foreach($courses as $course)
-			{
+			foreach($courses as $course) {
 				array_push($courseIds, $course->id);
 				array_push($courseNames, $course->name);
 			}
@@ -224,11 +213,9 @@
 			$enrollments = getEnrollments($key, $courseIds[$index]);
 			$students = getAssignments($key, $courseIds[$index]);
             
-            foreach($students as $student)
-            {   
+            foreach($students as $student) {   
                 // get the assignment stats for the current student
-                if(!empty($student))
-                {
+                if(!empty($student)) {
 					$json = array('missing' => $student->tardiness_breakdown->missing,
 								  'id' => $student->id);	
                 }
@@ -236,8 +223,7 @@
                 array_push($assignmentData, $json);
             }
 			
-			foreach($enrollments as $enrollment)
-			{
+			foreach($enrollments as $enrollment) {
 				date_default_timezone_set('America/Los_Angeles');
                 // get the current date, and the last login date
                 $currentDate = new DateTime(date('Y-m-d'));
@@ -270,22 +256,18 @@
 			$_SESSION['courseNames'] = $courseNames;
 		}
 
-		else
-		{
+		else {
 			$data = $_SESSION['engagement-'.$index];
 			$courseNames = $_SESSION['courseNames'];
 		}
 
-		if(isset($_POST['refresh']))
-		{
+		if(isset($_POST['refresh'])) {
 			unset($_SESSION['engagement-'.$index]);
 			unset($_SESSION['courseNames']);
 			unset($_POST['refresh']);
 			$f3->reroute('/reports/engagement/'.$index);
 		}
-
-		
-		
+	
 		$f3->set('data', $data);
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
@@ -294,7 +276,7 @@
 	});
 
 
-	$f3->route('GET|POST /login', function($f3){
+	$f3->route('GET|POST /login', function($f3) {
 
 		if(isset($_POST['submit'])) {
 			$errors = array();
@@ -321,7 +303,8 @@
 		echo Template::instance()->render('view/login.html');
 	});
 
-	$f3->route('GET|POST /logout', function($f3){
+	// route to log the user out. Unsets the user session
+	$f3->route('GET|POST /logout', function($f3) {
 		if(isset($_SESSION['user']))
 			unset($_SESSION['user']);
 
