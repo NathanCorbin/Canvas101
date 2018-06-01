@@ -14,7 +14,7 @@
 
 		$curl = new Curl();
 		$curl->get($url);
-
+		
 		$json = json_encode($curl->response);
         $json = json_decode($json);
 
@@ -55,6 +55,11 @@
      	$curl = new Curl();
 		$curl->get($url);
 
+		if($curl->error)
+		{
+			return array();
+		}
+
 		$json = json_encode($curl->response);
 		$json = json_decode($json);
 
@@ -77,5 +82,8 @@
 		$json = json_encode($curl->response);
 		$json = json_decode($json);
 
-      	return $json[0]->name;
+		if($json[0]->name != null)
+			return $json[0]->name;
+
+		return "";
 	}

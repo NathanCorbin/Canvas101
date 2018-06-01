@@ -7,8 +7,9 @@
 </head>
 <body>
     <include href="/view/includes/sidebar.html"></include>
-
+    
     <div class="container">
+        <!--
         <table class="mdl-data-table" id="assignmentTable" >
             <thead>
                 <th>Name</th>
@@ -22,16 +23,16 @@
                         <td>{{ @row['name'] }}</td>
                         <td>{{ @row['on_time'] }}</td>
                         <td class="clickable">{{ @row['floating'] }}</td>
-                        <td class="missing"><p>{{ @row['missing'] }}</p></td>
+                        <td id="missing"><p>{{ @row['missing'] }}</p></td>
                     </tr>
                 </repeat>
             </tbody>
         </table>
     </div>
+    !-->
 
-    <include href="/view/includes/modal.html"></include>
-
-    <button class="modal-trigger" href="#emailModal" id="showModal"></button>
+        <include href="/view/reports/assignment-reports.html"></include>
+    </div>
     
     <include href="/view/includes/javascripts.html">
 </body>

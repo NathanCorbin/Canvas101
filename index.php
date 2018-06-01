@@ -124,22 +124,23 @@
             
             // get all the assignments for the current course
 			$assignments = getAssignments($key, $courseIds[$index]);
-            
-            foreach($assignments as $assignment) {   
-                // get the assignment stats for the current student
-                if(!empty($assignment)) {
-					$json = array('missing' => $assignment->tardiness_breakdown->missing,
-								  'on_time' => $assignment->tardiness_breakdown->on_time,
-								  'late' => $assignment->tardiness_breakdown->late,
-								  'floating' => $assignment->tardiness_breakdown->floating,
-								  'id' => $assignment->id,
-                                  'name' => getStudentName($key, $assignment->id));
-                }
 
-                array_push($data, $json);
+			if(!empty($assignments)) {
+				foreach($assignments as $assignment) {   
+					// get the assignment stats for the current student
+					if(!empty($assignment)) {
+						$json = array('missing' => $assignment->tardiness_breakdown->missing,
+									'on_time' => $assignment->tardiness_breakdown->on_time,
+									'late' => $assignment->tardiness_breakdown->late,
+									'floating' => $assignment->tardiness_breakdown->floating,
+									'id' => $assignment->id,
+									'name' => getStudentName($key, $assignment->id));
+					}
+
+					array_push($data, $json);
+				}
 			}
 			
-
             // add the json data to the session
             $_SESSION["assignmentReport-$index"] = $data;
             $_SESSION['courseNames'] = $courseNames;
@@ -159,6 +160,8 @@
 			
 			$f3->reroute('/reports/assignments/'.$index);
 		}
+
+		echo $user->getUsername();
 
         $f3->set('data', $data);
 		$f3->set('courseNameList', $courseNames);
