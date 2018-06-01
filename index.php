@@ -281,6 +281,19 @@
 		echo Template::instance()->render('view/engagement.html');
 	});
 
+	$f3->route('GET|POST /admin', function($f3) {
+		if(!isset($_SESSION['user']))
+			$f3->reroute('/login');
+		
+		$user = unserialize($_SESSION['user']);
+
+		
+		if(!$user->isAdmin()) {
+			$f3->reroute('/');
+		}
+
+		echo Template::instance()->render('view/admin.html');
+	});
 
 	$f3->route('GET|POST /login', function($f3) {
 

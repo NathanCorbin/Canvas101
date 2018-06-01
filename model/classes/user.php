@@ -51,4 +51,14 @@
 		{
 			return $this->username;
 		}
+
+		/**
+		 * Checks if the current user is an admin
+		 * @return boolean true if the user is an admin, false if not
+		 */
+		public function isAdmin()
+		{
+			new UserDB();
+			return UserDB::isAdmin($this->username);
+		}
 	}

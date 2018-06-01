@@ -141,4 +141,24 @@ class UserDB
 
 		return $statement->fetchObject()->password;
 	}
+
+	/**
+	 * Checks if the selected user is an admin or not
+	 * 
+	 * @param string $username the username to check if is an admin
+	 * @return boolean true if admin, false if not
+	 */
+	public static function isAdmin($username)
+	{
+		global $dbh;
+
+		$query = "SELECT * FROM users WHERE username = :username AND admin_status = 1";
+
+		$statement = $dbh->prepare($query);
+		$statement->execute(['username' => $username]);
+
+		$result = $statement->fetch();
+
+		return !empty($result);
+	}
 }
