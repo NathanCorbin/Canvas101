@@ -86,6 +86,7 @@
 		$f3->set('data', $data);
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
+		$f3->set('index', $index);
 
 		echo Template::instance()->render('view/grades.html');
 	});
@@ -112,7 +113,7 @@
             $data = array();
 
             $courseIds = array();
-            $courseNames = array();
+			$courseNames = array();
 
             // get the course id and course name for each course
             foreach($courses as $course) {
@@ -121,19 +122,22 @@
             }
             
             // get all the assignments for the current course
-            $assignments = getAssignments($key, $courseIds[$index]);
+			$assignments = getAssignments($key, $courseIds[$index]);
             
             foreach($assignments as $assignment) {   
                 // get the assignment stats for the current student
                 if(!empty($assignment)) {
 					$json = array('missing' => $assignment->tardiness_breakdown->missing,
 								  'on_time' => $assignment->tardiness_breakdown->on_time,
+								  'late' => $assignment->tardiness_breakdown->late,
 								  'floating' => $assignment->tardiness_breakdown->floating,
+								  'id' => $assignment->id,
                                   'name' => getStudentName($key, $assignment->id));
                 }
 
                 array_push($data, $json);
-            }
+			}
+			
 
             // add the json data to the session
             $_SESSION["assignmentReport-$index"] = $data;
@@ -156,7 +160,8 @@
 		}
 
         $f3->set('data', $data);
-        $f3->set('courseNameList', $courseNames);
+		$f3->set('courseNameList', $courseNames);
+		$f3->set('index', $index);
 
 		echo Template::instance()->render('view/assignments.html');
 	});
@@ -227,10 +232,10 @@
 				date_default_timezone_set('America/Los_Angeles');
                 // get the current date, and the last login date
                 $currentDate = new DateTime(date('Y-m-d'));
-                $dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
+				$dateLoggedIn = new DateTime(date('Y-m-d', strtotime($enrollment->last_activity_at)));
                 
                 // calculate the date difference between now and when they last logged in
-                $daysElapsed = date_diff($currentDate, $dateLoggedIn);
+				$daysElapsed = date_diff($currentDate, $dateLoggedIn);
 
                 // get the time in which they logged in and format 
                 // it in a way that is easily readable
@@ -242,10 +247,10 @@
                                 'name' => $enrollment->user->name,
                                 'lastLogin' => explode('T', $enrollment->last_activity_at)[0],
                                 'time' => $time,
-                                'daysElapsed' => $daysElapsed->d,
+                                'daysElapsed' => $daysElapsed->format('%a'),
                                 'activityTime' => floor($enrollment->total_activity_time / 60),
 								'email' => $enrollment->user->login_id);
-
+				
                 // add json data to array
 				array_push($data, $json);
 			}
@@ -271,6 +276,7 @@
 		$f3->set('data', $data);
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
+		$f3->set('index', $index);
 		
 		echo Template::instance()->render('view/engagement.html');
 	});
