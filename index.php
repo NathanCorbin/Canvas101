@@ -87,6 +87,7 @@
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
 		$f3->set('index', $index);
+		$f3->set('user', $user);
 
 		echo Template::instance()->render('view/grades.html');
 	});
@@ -162,6 +163,7 @@
         $f3->set('data', $data);
 		$f3->set('courseNameList', $courseNames);
 		$f3->set('index', $index);
+		$f3->set('user', $user);
 
 		echo Template::instance()->render('view/assignments.html');
 	});
@@ -277,6 +279,7 @@
 		$f3->set('courseName', $courseNames[$index]);
 		$f3->set('courseNameList', $courseNames);
 		$f3->set('index', $index);
+		$f3->set('user', $user);
 		
 		echo Template::instance()->render('view/engagement.html');
 	});
@@ -291,6 +294,8 @@
 		if(!$user->isAdmin()) {
 			$f3->reroute('/');
 		}
+
+		$f3->set('user', $user);
 
 		echo Template::instance()->render('view/admin.html');
 	});
@@ -324,8 +329,10 @@
 
 	// route to log the user out. Unsets the user session
 	$f3->route('GET|POST /logout', function($f3) {
-		if(isset($_SESSION['user']))
-			unset($_SESSION['user']);
+		if(isset($_SESSION['user'])) {
+			$_SESSION = array();
+			session_destroy();
+		}
 
 		$f3->reroute('/login');
 	});
