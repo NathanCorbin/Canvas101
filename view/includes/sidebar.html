@@ -6,15 +6,22 @@
             </div>
         </div>
     </li>
-    <li><a class="waves-effect" href="{{ @BASE }}/reports/grades/{{ @index }}" data-target="courseDropDown"><i class="material-icons green-text text-darken-4">assessment</i>Grade Report</a></li>
-    <li><a class="waves-effect" href="{{ @BASE }}/reports/assignments/{{ @index }}"><i class="material-icons green-text text-darken-4">assignment</i>Assignment Report</a></li>
-    <li><a class="waves-effect" href="{{ @BASE }}/reports/engagement/{{ @index }}"><i class="material-icons green-text text-darken-4">assignment_late</i>Engagement Report</a></li>
-    <li><div class="divider"></div></li>
     <check if="{{ @user->isAdmin() }}">
         <true>
+            <li><a class="waves-effect" href="{{ @BASE }}/reports/grades/0"><i class="material-icons green-text text-darken-4">assessment</i>Grade Report</a></li>
+            <li><a class="waves-effect" href="{{ @BASE }}/reports/assignments/0"><i class="material-icons green-text text-darken-4">assignment</i>Assignment Report</a></li>
+            <li><a class="waves-effect" href="{{ @BASE }}/reports/engagement/0"><i class="material-icons green-text text-darken-4">assignment_late</i>Engagement Report</a></li>
+            <li><div class="divider"></div></li>
             <li><a class="waves-effect" href="{{ @BASE }}/admin"><i class="material-icons green-text text-darken-4">person</i>Admin</a></li>
         </true>
+        <false>
+            <li><a class="waves-effect" href="{{ @BASE }}/reports/grades/{{ @index }}" data-target="courseDropDown"><i class="material-icons green-text text-darken-4">assessment</i>Grade Report</a></li>
+            <li><a class="waves-effect" href="{{ @BASE }}/reports/assignments/{{ @index }}"><i class="material-icons green-text text-darken-4">assignment</i>Assignment Report</a></li>
+            <li><a class="waves-effect" href="{{ @BASE }}/reports/engagement/{{ @index }}"><i class="material-icons green-text text-darken-4">assignment_late</i>Engagement Report</a></li>
+            <li><div class="divider"></div></li>
+        </false>
     </check>
+
     <li><a class="waves-effect" href="{{ @BASE }}/logout"><i class="material-icons green-text text-darken-4">input</i>Logout</a></li>
 </ul>
 <a href="#" data-target="slide-out" class="sidenav-trigger" id="toggle"><i class="medium material-icons">menu</i></a>

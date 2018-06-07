@@ -293,12 +293,16 @@
 		
 		$user = unserialize($_SESSION['user']);
 
-		
 		if(!$user->isAdmin()) {
 			$f3->reroute('/');
 		}
 
+		new UserDB();
+
+		$users = UserDB::getAllUsers();
+
 		$f3->set('user', $user);
+		$f3->set('users', $users);
 
 		echo Template::instance()->render('view/admin.html');
 	});

@@ -1,3 +1,4 @@
+
 .container {
     padding-left: 300px;
     max-width: 1580px !important;
@@ -51,16 +52,20 @@
 }
 
 .modal {
-    width: 35% !important;
+    width: 45% !important;
 }
 
 .modal-container {
     margin: 0 auto;
-    width: 70%;
+    width: 75%;
 }
 
 .modal-header {
     padding-bottom: 2em;
+}
+
+.sidenav .user-view {
+    margin-bottom: 16px !important;
 }
 
 /*

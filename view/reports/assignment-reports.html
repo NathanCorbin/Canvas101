@@ -1,12 +1,84 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 
 <canvas id="myChart"></canvas>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
 <script>
-     var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
+    function sortJSON(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+        });
+    }
+    
+    var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
         
+    data = sortJSON(data, 'on_time');
+
     var labels = data.map(function(element){
-        return element.title;
+        return element.name;
     });
+
+    var turnedIn = data.map(function(element){
+        return element.on_time;
+    });
+
+    var missing = data.map(function(element){
+        return element.missing;
+    });
+
+    var late = data.map(function(element){
+        return element.late;
+    });
+
+    var barChartData = {
+        labels: labels,
+        datasets: [{
+            label: 'Turned In',
+            backgroundColor: 'rgba(10, 220, 10, 0.5)',
+            data: turnedIn
+        }, {
+            label: 'Late',
+            backgroundColor: 'rgba(220, 220, 20, 0.5)',
+            data: late
+        }, {
+            label: 'Missing',
+            backgroundColor: 'rgba(220, 10, 10, 0.5)',
+            data: missing
+        }]
+    };
+    window.onload = function() {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                title: {
+                    display: true,
+                    text: 'Assignment Report'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                            autoSkip: false,
+                            stepSize: 1
+                        }
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 1
+                        }
+                    }]
+                }
+            }
+        });
+    };
 
 </script>

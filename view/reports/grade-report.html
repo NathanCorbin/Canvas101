@@ -1,4 +1,6 @@
+
 <canvas id="myChart"></canvas>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script>
 
@@ -10,8 +12,6 @@
     }
 
     var ctx = document.getElementById("myChart").getContext('2d');
-    ctx.canvas.width = 10;
-    ctx.canvas.height = 10;
 
     var data = {{ json_encode(@data, JSON_PRETTY_PRINT) }};
     
@@ -33,14 +33,20 @@
     
     Chart.defaults.global.legend.display = false;
 
+    var horizontal = false;
+
+    if(window.innerHeight > window.innerWidth)
+        horizontal = false;
+    else
+        horizontal = true;
+
     var myChart = new Chart(ctx, {
-        type: 'horizontalBar',
+        type: horizontal == true ? 'horizontalBar' : 'bar',
         data: {
             labels: names,
             datasets: [{
                 data: grades,
                 backgroundColor: colors,
-                borderColor: borderColors,
                 borderWidth: 2
             }]
         },

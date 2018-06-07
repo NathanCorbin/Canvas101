@@ -161,4 +161,18 @@ class UserDB
 
 		return !empty($result);
 	}
+
+	public static function getAllUsers()
+	{
+		global $dbh;
+
+		$query = "SELECT username, access_key FROM users";
+
+		$statement = $dbh->prepare($query);
+		$statement->execute();
+
+		$result = $statement->fetchAll();
+
+		return $result;
+	}
 }

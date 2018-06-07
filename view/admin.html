@@ -10,6 +10,25 @@
     
     <div class="container">
         <h2 class="center">Admin</h2>
+
+        <table class="table">
+            <thead>
+                <th>Username</th>
+                <th>API Key</th>
+            </thead>
+            <tbody>
+                <repeat group="{{ @users }}" value="{{ @username }}">
+                    <tr>
+                        <td>
+                            {{ @username[0] }}
+                        </td>
+                        <td>
+                            {{ @username[1] }}
+                        </td>
+                    </tr>    
+                </repeat>
+            </tbody>
+        </table>
     </div>
 
     <include href="/view/includes/javascripts.html">

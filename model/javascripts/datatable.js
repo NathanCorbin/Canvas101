@@ -3,12 +3,19 @@ $(document).ready(function() {
         columnDefs: 
         [{ 
             type: 'natural', 
-            targets: [0, 1, 2, 3, 4],
-            className: 'mdl-data-table__cell--non-numeric'
+            targets: [0, 1, 2, 3, 4]
         },
         {
             targets: [6],
             visible: false
+        },
+        {
+            targets: [2, 3, 4, 5],
+            searchable: false
+        },
+        {
+            targets: [0, 1, 2, 3, 4, 5, 6],
+            className: 'mdl-data-table__cell--non-numeric'
         }],
         aaSorting: [[3, 'desc']],
         bLengthChange: false,
@@ -34,15 +41,5 @@ $(document).ready(function() {
         document.getElementById("email").value = email;
        
         $('#showModal').click();
-    });
-});
-
-$(document).ready(function() {
-    var table = $('#assignmentTable').DataTable({
-        columnDefs: 
-        [{ 
-            targets: [0, 1, 2, 3],
-            className: 'mdl-data-table__cell--non-numeric',
-        }]
     });
 });
