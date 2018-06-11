@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New User</title>
+    <include href="/view/includes/styles.html">
+        </head>
+<body>
+<include href="/view/includes/sidebar.html"></include>
+
+<div class="container">
+    <h2 class="center">New User</h2>
+    <p class="center red-text">{{ @errors['validation'] }}</p>
+    <p class="center red-text">{{ @errors['password'] }}</p>
+    <div class="row">
+        <form method="POST" class="col s8 offset-s2">
+            <div class="input-field col s12">
+                <input id="username" name="username" type="text" class="validate">
+                <label for="username"><i class="red-text">*</i> Username</label>
+            </div>
+            <div class="input-field col s12">
+                <input id="password" name="password" type="password" class="validate">
+                <label for="password"><i class="red-text">*</i> Password</label>
+            </div>
+            <div class="input-field col s12">
+                <input id="passwordConfirm" name="passwordConfirm" type="password" class="validate">
+                <label for="passwordConfirm">Confirm Password</label>
+            </div>
+            <div class="input-field col s12">
+                <input id="apiKey" name="apiKey" type="text">
+                <label for="apiKey">Api Key</label>
+            </div>
+            <div class="input-field col s12">
+                <input id="submit" name="submit" type="submit" class="btn" value="Add User">
+            </div>
+        </form>
+    </div>
+
+</div>
+<include href="/view/includes/javascripts.html">
+</body>
+</html>
+
