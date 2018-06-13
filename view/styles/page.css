@@ -55,6 +55,14 @@
     width: 45% !important;
 }
 
+#editModal {
+    width: 25% !important;
+}
+
+input {
+	color: white;
+}
+
 .modal-container {
     margin: 0 auto;
     width: 75%;
@@ -67,6 +75,78 @@
 .sidenav .user-view {
     margin-bottom: 16px !important;
 }
+
+.edit, .delete-user {
+    cursor: pointer;
+}
+
+.circle {
+    height: 128px !important; 
+    width: 128px !important;
+}
+
+
+body {
+    color: white;
+    background-color: #3e3e3e;
+}
+
+tr {
+    color: white !important;
+    background-color: #2e2e2e !important;
+}
+
+.mdl-button {
+    color: white;
+}
+
+.previous {
+    color: white;
+}
+
+.green-text {
+    color: #2e8839 !important;
+}
+
+.background > img {
+    padding: 1rem;
+}
+
+.mdl-button--colored {
+    background: #2e8839 !important;
+}
+
+.mdl-button.mdl-button--disabled.mdl-button--disabled, .mdl-button[disabled][disabled] {
+    display: none;
+}
+
+.dataTables_info {
+    color: white !important;
+}
+
+.sorting, .sorting_asc, .sorting_desc {
+    background : none !important;
+}
+
+.card {
+    padding: 2rem;
+}
+
+.card {
+    background-color: #2e2e2e;
+}
+
+h4 {
+    padding-top: 0.5em;
+}
+
+table.dataTable thead th {
+    border-color: white;
+  }
+
+table.dataTable.no-footer {
+    border-bottom: 0;
+  }
 
 /*
 .sidenav {

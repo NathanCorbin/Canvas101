@@ -1,67 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin</title>
+	<title>Admin</title>
+
     <include href="/view/includes/styles.html"></include>
 </head>
 <body>
-<include href="/view/includes/sidebar.html"></include>
+    <include href="/view/includes/sidebar-dark.html"></include>
+    
+    <div class="container">
 
-<div class="container">
-    <h2 class="center">Admin</h2>
-    <div class="center">
+        <div class="center">
 
-        <p class="green-text center" id="success"><b>{{ $_POST['success'] }}</b></p>
-        <table class="hover" id="adminTable">
-            <thead>
-            <th scope="col">Username</th>
-            <th scope="col">API Key</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-            </thead>
-            <tbody>
+            <div class="card z-depth-3">
+                
+                <h3 class="center">Admin</h3>
+
+                <p class="green-text center" id="success"><b>{{ $_POST['success'] }}</b></p>
+
+                <table class="hover" id="adminTable">
+                    <thead>
+                        <th scope="col">Username</th>
+                        <th scope="col">API Key</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </thead>
+                    <tbody>
+                        <repeat group="{{ @users }}" value="{{ @user }}">
+                            <tr>
+                                <td>
+                                    {{ @user[0] }}
+                                </td>
+                                <td>
+                                    {{ @user[1] }}
+                                </td>
+                                <td class="edit center">
+                                    <i class="material-icons">edit</i>
+                                </td>
+                                <td class="delete-user center">
+                                    <check if="{{ @user[0] == 'admin' }}">
+                                        <false>
+                                            <i class="material-icons red-text">close</i>
+                                        </false>
+                                    </check>
+                                </td>
+                            </tr>    
+                        </repeat>
+                    </tbody>
+                </table>
+
+                <form method="POST">
+                    <input type="submit" name="submit" class="btn" id="newUser" value="New User">
+                </form> 
+
+            </div>
+
+            <include href="/view/includes/modal.html"></include>
+
+            <button class="modal-trigger" href="#editModal" id="showModal"></button>
+
+        </div>
+        
+        <!--
+        <ul class="collection">
             <repeat group="{{ @users }}" value="{{ @user }}">
-                <tr>
-                    <td>
-                        {{ @user[0] }}
-                    </td>
-                    <td>
-                        {{ @user[1] }}
-                    </td>
-                    <td class="edit">
-                        <i class="material-icons">edit</i>
-                    </td>
-                    <td class="delete-user">
-                        <check if="{{ @user[0] == 'admin' }}">
-                            <false>
-                                <i class="material-icons">close</i>
-                            </false>
-                        </check>
-                    </td>
-                </tr>
+                <li class="collection-item avatar">
+                    <i class="material-icons circle green">person</i>
+                    <span class="title">{{ @user[0 ]}}</span>
+                    <p class="truncate">{{ @user[1] }}</p>
+                    <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a>
+                </li>
             </repeat>
-            </tbody>
-        </table>
-        <form method="POST">
-            <input type="submit" name="submit" class="btn" id="newUser" value="New User">
-        </form>
-        <include href="/view/includes/modal.html"></include>
-        <button class="modal-trigger" href="#editModal" id="showModal"></button>
+        </ul>
+        !-->
+
+
     </div>
 
-    <!--
-    <ul class="collection">
-        <repeat group="{{ @users }}" value="{{ @user }}">
-            <li class="collection-item avatar">
-                <i class="material-icons circle green">person</i>
-                <span class="title">{{ @user[0 ]}}</span>
-                <p class="truncate">{{ @user[1] }}</p>
-                <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a>
-            </li>
-        </repeat>
-    </ul>
-    !-->
-</div>
-<include href="/view/includes/javascripts.html">
+    <include href="/view/includes/javascripts.html">
 </body>
 </html>

@@ -1,6 +1,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 
-<canvas id="myChart"></canvas>
+<div class="card z-depth-3">
+    <canvas id="myChart"></canvas>
+</div>
 
 <script>
     function sortJSON(array, key) {
@@ -30,31 +32,34 @@
         return element.late;
     });
 
+    Chart.defaults.global.defaultFontColor = "#fff";
+
     var barChartData = {
         labels: labels,
         datasets: [{
             label: 'Turned In',
-            backgroundColor: 'rgba(10, 220, 10, 0.5)',
+            backgroundColor: 'rgba(40, 160, 5, .55)',
             data: turnedIn
         }, {
             label: 'Late',
-            backgroundColor: 'rgba(220, 220, 20, 0.5)',
+            backgroundColor: 'rgba(235, 235, 20, .65)',
             data: late
         }, {
             label: 'Missing',
-            backgroundColor: 'rgba(220, 10, 10, 0.5)',
+            backgroundColor: 'rgba(165, 70, 70, .65)',
             data: missing
         }]
     };
     window.onload = function() {
         var ctx = document.getElementById('myChart').getContext('2d');
         window.myBar = new Chart(ctx, {
-            type: 'bar',
+            type: 'horizontalBar',
             data: barChartData,
             options: {
                 title: {
                     display: true,
-                    text: 'Assignment Report'
+                    text: 'Assignment Report For {{ @courseName }}',
+                    fontSize: 20
                 },
                 tooltips: {
                     mode: 'index',

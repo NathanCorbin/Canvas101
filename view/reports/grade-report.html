@@ -1,5 +1,6 @@
-
-<canvas id="myChart"></canvas>
+<div class="card z-depth-3">
+    <canvas id="myChart"></canvas>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script>
@@ -25,13 +26,11 @@
         return element.name;
     });
 
-    const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(220, 10, 10, 0.5)' 
-                                        : (Math.floor(value) < 80 ? 'rgba(220, 220, 20, 0.5)' : 'rgba(10, 220, 10, 0.5)'));
-    
-    const borderColors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(180, 10, 10, 1)' 
-                                        : (Math.floor(value) < 80 ? 'rgba(190, 190, 20, 1)' : 'rgba(10, 190, 10, 1)'));
+    const colors = grades.map((value) => Math.floor(value) <= 65 ? 'rgba(165, 70, 70, .65)' 
+                                        : (Math.floor(value) < 80 ? 'rgba(235, 235, 20, .65)' : 'rgba(40, 160, 5, .55)'));
     
     Chart.defaults.global.legend.display = false;
+    Chart.defaults.global.defaultFontColor = "#fff";
 
     var horizontal = false;
 
@@ -51,6 +50,11 @@
             }]
         },
         options: {
+            title: {
+                display: true,
+                text: 'Assignment Report For {{ @courseName }}',
+                fontSize: 20
+            },
             scales: {
                 yAxes: [{
                     ticks: {
@@ -65,6 +69,7 @@
                 }]
             },
             responsive:true,
+            scaleFontColor: "#FFFFFF"
             
         }
     });
