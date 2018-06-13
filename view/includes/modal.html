@@ -36,3 +36,29 @@
         </div>
     </div>
 </div> 
+
+<!-- Modal Structure -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h4>Edit User</h4>
+        <div class="row">
+            <form method="POST" class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Username" id="username" name="username" type="text" class="validate" readonly="true">
+                        <label for="username">Username</label>
+                    </div>
+                </div>  
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="API Key" id="api_key" name="api_key" type="text" class="validate truncate">
+                        <label for="api_key">API Key</label>
+                    </div>
+                </div>
+                <button class="btn waves-effect waves-light right" type="submit" name="edit" id="send-btn">Edit
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
