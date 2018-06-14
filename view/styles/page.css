@@ -237,7 +237,12 @@ table.dataTable thead th {
 
 table.dataTable.no-footer {
     border-bottom: 0;
-  }
+}
+
+.modal {
+    background-color: #3e3e3e;
+    color: white;
+}
 
 /*
 .sidenav {
