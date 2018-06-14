@@ -4,9 +4,96 @@
     max-width: 1580px !important;
 }
 
+@media only screen and (max-width : 1700px) {
+
+    .responsive-card {
+        width: 1000px !important;
+    }
+
+    table {
+        width: 800px !important;
+    }
+}
+
+@media only screen and (max-width : 1420px) {
+    .responsive-card {
+        width: 800px !important;
+    }
+
+    table {
+        width: 600px !important;
+    }
+
+    .container {
+        padding-left: 200px;
+    }
+
+    .truncate {
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media only screen and (max-width : 1260px) {
+    .responsive-card {
+        width: 800px !important;
+    }
+
+    table {
+        width: 600px !important;
+    }
+
+    .hide-when-small {
+        display: none;
+    }
+}
+
+@media only screen and (max-width : 1220px) {
+    .responsive-card {
+        width: 700px !important;
+    }
+
+    table {
+        width: 500px !important;
+    }
+
+    .hide-when-small {
+        display: none;
+    }
+}
+
+@media only screen and (max-width : 1100px) {
+    .responsive-card {
+        width: 600px !important;
+    }
+
+    table {
+        width: 400px !important;
+    }
+
+    .hide-when-small {
+        display: none;
+    }
+}
+
 @media only screen and (max-width : 992px) {
     .container {
         padding-left: 0;
+    }
+
+    .hide-when-small {
+        display: none;
+    }
+    
+    .responsive-card {
+        margin: 0 auto !important;
+        width: 800px !important;
+    }
+
+    table {
+        width: 600px !important;
     }
 }
 
@@ -16,6 +103,10 @@
         padding-left: 310px;
         padding-right: 10px;
     }
+}
+
+h4, h3 {
+    margin: 0 auto;
 }
 
 .sidenav {

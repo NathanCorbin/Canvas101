@@ -15,12 +15,10 @@ $(document).ready(function() {
         }],
         aaSorting: [3, 'desc'],
         bLengthChange: false,
-        responsive: true
     });
 
     var adminTable = $('#adminTable').DataTable({
-        bLengthChange: false,
-        responsive: true
+        bLengthChange: false
     });
 
     $('#adminTable tbody').on( 'click', '.delete-user', function (e) {

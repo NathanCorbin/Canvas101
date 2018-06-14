@@ -5,65 +5,67 @@
     <include href="/view/includes/styles.html">
 </head>
 <body>
-    <include href="/view/includes/sidebar.html">
+    <include href="/view/includes/sidebar-dark.html">
     
     <div class="container">
-        <h4 class="center">Engagement Report for {{ @courseName }}</h4>
-        
-        <div class="row">
-            <div class="col s12">
-                <table class="mdl-data-table" id="engagementTable" >
-                    <thead>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Last Login</th>
-                        <th scope="col">Activity Time</th>
-                        <th scope="col">Missing Assignments</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">hidden</th>
-                    </thead>
-                    <tbody>
-                        <repeat group="{{ @data }}" value="{{ @row }}">
-                            <check if="{{ @row['name'] == '' }}">
-                                <true>
-                                </true>
-                                <false>
-                                    <tr data-id="{{ @row['id'] }}">
-                                        <td>{{ @row['id'] }}</td>
-                                        <td>{{ @row['name'] }}</td>
-        
-                                        <check if="{{ @row['lastLogin'] == '' }}">
-                                            <true>
-                                                <td class="text-red" width="20%">Never Logged In</td>
-                                            </true>
-                                            <false>
-                                                <check if="{{ @row['daysElapsed'] == 0 }}">
-                                                    <true>
-                                                        <td width="25%">Today at {{ @row['time'] }}</td>
-                                                    </true>
-                                                    <false>
-                                                        <check if="{{ @row['daysElapsed'] == 1 }}">
-                                                            <true>
-                                                                <td width="25%">{{ @row['daysElapsed'] }} day ago</td>
-                                                            </true>
-                                                            <false>
-                                                                <td width="25%">{{ @row['daysElapsed'] }} days ago</td>
-                                                            </false>
-                                                        </check>
-                                                    </false>
-                                                </check>
-                                            </false>
-                                        </check>
-                                        <td width="20%">{{ @row['activityTime'] }} minutes</td>
-                                        <td width="10%">{{ @row['missing'] }}</td>
-                                        <td class="center clickable" width="5%"><a href="mailto:{{ @row['email'] }}"><i class="material-icons cyan-text text-darken-4">email</i></a></td>    
-                                        <td>{{ @row['email'] }}</td>                    
-                                    </tr>
-                                </false>
-                            </check>
-                        </repeat>
-                    </tbody>
-                </table>
+
+        <div class="card responsive-card z-depth-3">
+            <div class="row">
+                <div class="col s12">
+                    <table id="engagementTable" >
+                        <!-- <h4 class="center">Engagement Report for {{ @courseName }}</h4> !-->
+                        <thead>
+                            <th scope="col" class="hide-when-small">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col" class="hide-when-small">Last Login</th>
+                            <th scope="col" class="hide-when-small">Activity Time</th>
+                            <th scope="col" class="hide-when-small">Missing Assignments</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">hidden</th>
+                        </thead>
+                        <tbody>
+                            <repeat group="{{ @data }}" value="{{ @row }}">
+                                <check if="{{ @row['name'] == '' }}">
+                                    <true>
+                                    </true>
+                                    <false>
+                                        <tr data-id="{{ @row['id'] }}">
+                                            <td class="hide-when-small">{{ @row['id'] }}</td>
+                                            <td>{{ @row['name'] }}</td>
+            
+                                            <check if="{{ @row['lastLogin'] == '' }}">
+                                                <true>
+                                                    <td class="text-red hide-when-small" width="20%">Never Logged In</td>
+                                                </true>
+                                                <false>
+                                                    <check if="{{ @row['daysElapsed'] == 0 }}">
+                                                        <true>
+                                                            <td width="25%" class="hide-when-small">Today at {{ @row['time'] }}</td>
+                                                        </true>
+                                                        <false>
+                                                            <check if="{{ @row['daysElapsed'] == 1 }}">
+                                                                <true>
+                                                                    <td width="25%" class="hide-when-small">{{ @row['daysElapsed'] }} day ago</td>
+                                                                </true>
+                                                                <false>
+                                                                    <td width="25%" class="hide-when-small">{{ @row['daysElapsed'] }} days ago</td>
+                                                                </false>
+                                                            </check>
+                                                        </false>
+                                                    </check>
+                                                </false>
+                                            </check>
+                                            <td width="20%" class="hide-when-small">{{ @row['activityTime'] }} minutes</td>
+                                            <td width="10%" class="hide-when-small">{{ @row['missing'] }}</td>
+                                            <td class="center clickable" width="5%"><a href="mailto:{{ @row['email'] }}"><i class="material-icons green-text">email</i></a></td>    
+                                            <td>{{ @row['email'] }}</td>                    
+                                        </tr>
+                                    </false>
+                                </check>
+                            </repeat>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <include href="/view/includes/modal.html">

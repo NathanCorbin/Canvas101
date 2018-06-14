@@ -12,16 +12,15 @@
 
         <div class="center">
 
-            <div class="card z-depth-3">
-                
-                <h3 class="center">Admin</h3>
+            <div class="card responsive-card z-depth-3">                
 
                 <p class="green-text center" id="success"><b>{{ $_POST['success'] }}</b></p>
 
-                <table class="hover" id="adminTable">
+                <table id="adminTable">
+                    <h3 class="center">Admin</h3>
                     <thead>
                         <th scope="col">Username</th>
-                        <th scope="col">API Key</th>
+                        <th scope="col" class="hide-when-small">API Key</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </thead>
@@ -31,7 +30,7 @@
                                 <td>
                                     {{ @user[0] }}
                                 </td>
-                                <td>
+                                <td class="hide-when-small truncate">
                                     {{ @user[1] }}
                                 </td>
                                 <td class="edit center">
